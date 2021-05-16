@@ -108,7 +108,7 @@ class _StatusScreenState extends State<StatusScreen> {
                           builder: (context) {
                             return Container(
                               color: UniversalVeriables.bg,
-                              height: context.dynamicHeight(0.1),
+                              height: context.dynamicHeight(0.3),
                               child: Column(
                                 children: [
                                   ListTile(
@@ -155,26 +155,15 @@ class _StatusScreenState extends State<StatusScreen> {
                           leading: Stack(
                             children: [
                               CircleAvatar(
+                                backgroundColor:UniversalVeriables.appBarColor ,
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                  size: 35,
+                                ),
                                 radius: 30,
-                                backgroundImage:
-                                    NetworkImage(_userModel.user.profileURL),
                               ),
-                              Positioned(
-                                bottom: 0.0,
-                                right: 1.0,
-                                child: Container(
-                                    height: context.dynamicHeight(0.1),
-                                    width: context.dynamicWidth(0.1),
-                                    child: Icon(
-                                      Icons.add,
-                                      color: UniversalVeriables.appBarColor,
-                                      size: 15,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle,
-                                    )),
-                              ),
+
                             ],
                           ),
                           title: Text(
@@ -201,7 +190,7 @@ class _StatusScreenState extends State<StatusScreen> {
                 : Container(),
             _userModel.user.role.contains("Admin")
                 ? Padding(
-                    padding: context.paddingAllLow,
+                    padding: context.paddingAllLow2,
                     child: Text(
                       getTranslated(context, "Added announcements"),
                       style: TextStyle(

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:kbu_app/localization/localization_constants.dart';
 import 'package:kbu_app/notification_handler.dart';
 import 'package:kbu_app/screens/activity/activityScreen.dart';
+import 'package:kbu_app/screens/group/groupChatListScreen.dart';
 import 'package:kbu_app/utils/universal_veriables.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
 import '../news/newsScreen.dart';
@@ -61,6 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ChatListScreen(),
             ),
             Center(
+              child: GroupChatListScreen(),
+            ),
+            Center(
               child: NewsPage(),
             ),
             Center(
@@ -89,57 +93,73 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text(
                       getTranslated(context, "Chat"),
                       style: TextStyle(
-                          fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
+                          fontSize: ResponsiveFlutter.of(context).fontSize(1),
                           // ignore: unrelated_type_equality_checks
                           color: (_page == 0)
                               ? UniversalVeriables.tabColor
                               : UniversalVeriables.greyColor),
                     )),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.notifications,
+                    icon: Icon(Icons.group,
                         // ignore: unrelated_type_equality_checks
                         color: (_page == 1)
                             ? UniversalVeriables.tabColor
                             : UniversalVeriables.greyColor),
                     // ignore: deprecated_member_use
                     title: Text(
-                      getTranslated(context, "News"),
+                      getTranslated(context, "Groups"),
                       style: TextStyle(
-                          fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
+                          fontSize: ResponsiveFlutter.of(context).fontSize(1),
                           // ignore: unrelated_type_equality_checks
                           color: (_page == 1)
                               ? UniversalVeriables.tabColor
                               : UniversalVeriables.greyColor),
                     )),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.local_activity_outlined,
+                    icon: Icon(Icons.notifications,
                         // ignore: unrelated_type_equality_checks
                         color: (_page == 2)
                             ? UniversalVeriables.tabColor
                             : UniversalVeriables.greyColor),
                     // ignore: deprecated_member_use
                     title: Text(
-                      getTranslated(context, "Activities"),
+                      getTranslated(context, "News"),
                       style: TextStyle(
-                          fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
+                          fontSize: ResponsiveFlutter.of(context).fontSize(1),
                           // ignore: unrelated_type_equality_checks
                           color: (_page == 2)
                               ? UniversalVeriables.tabColor
                               : UniversalVeriables.greyColor),
                     )),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.announcement,
+                    icon: Icon(Icons.local_activity_outlined,
                         // ignore: unrelated_type_equality_checks
                         color: (_page == 3)
                             ? UniversalVeriables.tabColor
                             : UniversalVeriables.greyColor),
                     // ignore: deprecated_member_use
                     title: Text(
-                      getTranslated(context, "Announcements"),
+                      getTranslated(context, "Activities"),
                       style: TextStyle(
-                          fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
+                          fontSize: ResponsiveFlutter.of(context).fontSize(1),
                           // ignore: unrelated_type_equality_checks
                           color: (_page == 3)
+                              ? UniversalVeriables.tabColor
+                              : UniversalVeriables.greyColor),
+                    )),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.announcement,
+                        // ignore: unrelated_type_equality_checks
+                        color: (_page == 4)
+                            ? UniversalVeriables.tabColor
+                            : UniversalVeriables.greyColor),
+                    // ignore: deprecated_member_use
+                    title: Text(
+                      getTranslated(context, "Announcements"),
+                      style: TextStyle(
+                          fontSize: ResponsiveFlutter.of(context).fontSize(1),
+                          // ignore: unrelated_type_equality_checks
+                          color: (_page == 4)
                               ? UniversalVeriables.tabColor
                               : UniversalVeriables.greyColor),
                     )),
@@ -153,3 +173,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+

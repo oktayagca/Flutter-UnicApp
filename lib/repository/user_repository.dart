@@ -12,6 +12,7 @@ import 'package:kbu_app/services/firebase_auth_service.dart';
 import 'package:kbu_app/services/firebase_storage_service.dart';
 import 'package:kbu_app/services/firestore_db_service.dart';
 import 'package:kbu_app/services/locator.dart';
+import 'package:kbu_app/model/groupSpeech.dart';
 
 enum AppMode { DEBUG, RELEASE }
 
@@ -162,9 +163,55 @@ class UserRepository implements AuthBase {
     }
   }
 
+  Stream<List<Message>> getGroupMessages(
+      String currentUserID, String chattedUserID) {
+    if (appMode == AppMode.DEBUG) {
+      return _fireStoreDbService.getGroupMessages(currentUserID, chattedUserID);
+    } else {
+      return _fireStoreDbService.getGroupMessages(currentUserID, chattedUserID);
+    }
+  }
+
   Future<bool> saveMessage(Message saveMessage, UserModel currentUser) async {
     if (appMode == AppMode.DEBUG) {
       var result = await _fireStoreDbService.saveMessage(saveMessage);
+      if (result) {
+        var token = "";
+        if (userToken.containsKey(saveMessage.who)) {
+          token = userToken[saveMessage.who];
+        } else {
+          token = await _fireStoreDbService.tokenGet(saveMessage.who);
+          if (token != null) userToken[saveMessage.who] = token;
+        }
+        if (token != null)
+          await _notificationSendService.sendNotification(
+              saveMessage, currentUser, token);
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      var result = await _fireStoreDbService.saveMessage(saveMessage);
+      if (result) {
+        var token = "";
+        if (userToken.containsKey(saveMessage.who)) {
+          token = userToken[saveMessage.who];
+        } else {
+          token = await _fireStoreDbService.tokenGet(saveMessage.who);
+          if (token != null) userToken[saveMessage.who] = token;
+        }
+        if (token != null)
+          await _notificationSendService.sendNotification(
+              saveMessage, currentUser, token);
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+  Future<bool> saveGroupMessage(Message saveMessage, UserModel currentUser) async {
+    if (appMode == AppMode.DEBUG) {
+      var result = await _fireStoreDbService.saveGroupMessage(saveMessage);
       if (result) {
         var token = "";
         if (userToken.containsKey(saveMessage.who)) {
@@ -208,6 +255,14 @@ class UserRepository implements AuthBase {
     }
   }
 
+  Stream<List<GroupSpeech>> getAllGroupConversation(String userID) {
+    if (appMode == AppMode.DEBUG) {
+      return _fireStoreDbService.getAllGroupConversation(userID);
+    } else {
+      return _fireStoreDbService.getAllGroupConversation(userID);
+    }
+  }
+
   Future<List<Message>> getMessageWithPagination(String currentUserID,
       String chattedUserID, Message lastMessage, int total) {
     if (appMode == AppMode.DEBUG) {
@@ -215,6 +270,17 @@ class UserRepository implements AuthBase {
           currentUserID, chattedUserID, lastMessage, total);
     } else {
       return _fireStoreDbService.getMessageWithPagination(
+          currentUserID, chattedUserID, lastMessage, total);
+    }
+  }
+
+  Future<List<Message>> getGroupMessageWithPagination(String currentUserID,
+      String chattedUserID, Message lastMessage, int total) {
+    if (appMode == AppMode.DEBUG) {
+      return _fireStoreDbService.getGroupMessageWithPagination(
+          currentUserID, chattedUserID, lastMessage, total);
+    } else {
+      return _fireStoreDbService.getGroupMessageWithPagination(
           currentUserID, chattedUserID, lastMessage, total);
     }
   }
@@ -309,12 +375,6 @@ class UserRepository implements AuthBase {
   }
   Future<bool> createGroup(Group group) async {
     var result = await _fireStoreDbService.createGroup(group);
-    if(result){
-      print("Group Created:");
-    }
-    else{
-      print("Detected error While creating GROUP:");
-    }
     return result;
   }
 }

@@ -6,6 +6,7 @@ import 'package:kbu_app/model/activity.dart';
 import 'package:kbu_app/model/group.dart';
 import 'package:kbu_app/model/message.dart';
 import 'package:kbu_app/model/news.dart';
+import 'package:kbu_app/model/groupSpeech.dart';
 import 'package:kbu_app/model/speech.dart';
 import 'package:kbu_app/model/user_model.dart';
 import 'package:kbu_app/repository/user_repository.dart';
@@ -167,7 +168,9 @@ class UserViewModel with ChangeNotifier implements AuthBase {
   Stream<List<Speech>>getAllConversation(String userID) {
     return _userRepository.getAllConversation(userID);
   }
-
+  Stream<List<GroupSpeech>>getAllGroupConversation(String userID) {
+    return _userRepository.getAllGroupConversation(userID);
+  }
   UserModel findUserInList(String userID){
     for(int i=0;i<allUserList.length;i++){
       if(allUserList[i].userID == userID){
@@ -237,6 +240,4 @@ class UserViewModel with ChangeNotifier implements AuthBase {
     var result = await _userRepository.createGroup(group);
     return result;
   }
-
-
 }

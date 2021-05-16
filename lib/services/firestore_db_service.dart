@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kbu_app/model/Story.dart';
 import 'package:kbu_app/model/activity.dart';
@@ -8,14 +7,15 @@ import 'package:kbu_app/model/news.dart';
 import 'package:kbu_app/model/speech.dart';
 import 'package:kbu_app/model/user_model.dart';
 import 'package:kbu_app/services/database_base.dart';
+import 'package:kbu_app/model/groupSpeech.dart';
 
 class FireStoreDbService implements DbBase {
   @override
   Future<bool> saveUser(UserModel user) async {
-    if(user.email.contains("gmail")){
+    if (user.email.contains("gmail")) {
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
       await _firestore.collection("users").doc(user.userID).set(user.toMap());
-    }else{
+    } else {
       user.role = "Student";
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
       await _firestore.collection("users").doc(user.userID).set(user.toMap());
@@ -57,8 +57,10 @@ class FireStoreDbService implements DbBase {
 
   @override
   Future<List<UserModel>> getAllUser() async {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection("users").orderBy("userName").get();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .orderBy("userName")
+        .get();
 
     List<UserModel> allUser = [];
     for (DocumentSnapshot oneUser in querySnapshot.docs) {
@@ -70,14 +72,26 @@ class FireStoreDbService implements DbBase {
   }
 
   @override
-  Stream<List<Speech>> getAllConversations(String userID)  {
-    var snapShot= FirebaseFirestore.instance
+  Stream<List<Speech>> getAllConversations(String userID) {
+    var snapShot = FirebaseFirestore.instance
         .collection("speeches")
         .where("messageOwner", isEqualTo: userID)
         .orderBy("createDate", descending: true)
         .snapshots();
     return snapShot.map((conversationList) => conversationList.docs
         .map((conversation) => Speech.fromMap(conversation.data()))
+        .toList());
+  }
+
+  @override
+  Stream<List<GroupSpeech>> getAllGroupConversation(String userID) {
+    var snapShot = FirebaseFirestore.instance
+        .collection("groups")
+        .where("members", arrayContains: userID).
+        orderBy("createDate", descending: true)
+        .snapshots();
+    return snapShot.map((conversationList) => conversationList.docs
+        .map((conversation) => GroupSpeech.fromMap(conversation.data()))
         .toList());
   }
 
@@ -95,6 +109,22 @@ class FireStoreDbService implements DbBase {
         .map((message) => Message.fromMap(message.data()))
         .toList());
   }
+
+  @override
+  Stream<List<Message>> getGroupMessages(
+      String currentUserID, String chattedUserID) {
+    var snapShot = FirebaseFirestore.instance
+        .collection("groups")
+        .doc(chattedUserID)
+        .collection("messages")
+        .orderBy("date", descending: true)
+        .limit(1)
+        .snapshots();
+    return snapShot.map((messageList) => messageList.docs
+        .map((message) => Message.fromMap(message.data()))
+        .toList());
+  }
+
 
   @override
   Future<bool> saveMessage(Message saveMessage) async {
@@ -137,17 +167,39 @@ class FireStoreDbService implements DbBase {
     return true;
   }
 
-  Future<List<Message>> getMessageWithPagination(String currentUserID, String chattedUserID,Message lastMessage, int total)async{
+  @override
+  Future<bool> saveGroupMessage(Message saveMessage) async {
+    var _messageID = FirebaseFirestore.instance.collection("groups").doc().id;
+    var _myDocID = saveMessage.who;
+    var _saveMessageToMap = saveMessage.toMap();
+    await FirebaseFirestore.instance
+        .collection("groups")
+        .doc(_myDocID)
+        .collection("messages")
+        .doc(_messageID)
+        .set(_saveMessageToMap);
+    await FirebaseFirestore.instance.collection("groups").doc(_myDocID).update({
+      "messageOwner": saveMessage.fromWho,
+      "chatWith": saveMessage.who,
+      "lastMessage": saveMessage.message,
+      "seen": false,
+      "createDate": FieldValue.serverTimestamp(),
+    });
+    return true;
+  }
+  Future<List<Message>> getMessageWithPagination(String currentUserID,
+      String chattedUserID, Message lastMessage, int total) async {
     QuerySnapshot _querySnapshot;
     List<Message> _allMessage = [];
-    if(lastMessage == null){
+    if (lastMessage == null) {
       _querySnapshot = await FirebaseFirestore.instance
           .collection("speeches")
           .doc(currentUserID + "--" + chattedUserID)
           .collection("messages")
-          .orderBy("date", descending: true).limit(total)
+          .orderBy("date", descending: true)
+          .limit(total)
           .get();
-    }else{
+    } else {
       _querySnapshot = await FirebaseFirestore.instance
           .collection("speeches")
           .doc(currentUserID + "--" + chattedUserID)
@@ -158,22 +210,56 @@ class FireStoreDbService implements DbBase {
           .get();
       await Future.delayed(Duration(seconds: 1));
     }
-    for(DocumentSnapshot snap in _querySnapshot.docs){
+    for (DocumentSnapshot snap in _querySnapshot.docs) {
       Message _oneMessage = Message.fromMap(snap.data());
       _allMessage.add(_oneMessage);
     }
     return _allMessage;
   }
 
-  Future<String> tokenGet(String who) async{
-    DocumentSnapshot _token = await FirebaseFirestore.instance.doc("tokens/"+who).get();
-    if(_token!=null)
-    return _token.data()["token"];
-    else return null;
+  Future<List<Message>> getGroupMessageWithPagination(String currentUserID,
+      String chattedUserID, Message lastMessage, int total) async {
+    QuerySnapshot _querySnapshot;
+    List<Message> _allMessage = [];
+    if (lastMessage == null) {
+      _querySnapshot = await FirebaseFirestore.instance
+          .collection("groups")
+          .doc(chattedUserID)
+          .collection("messages")
+          .orderBy("date", descending: true)
+          .limit(total)
+          .get();
+    } else {
+      _querySnapshot = await FirebaseFirestore.instance
+          .collection("groups")
+          .doc(chattedUserID)
+          .collection("messages")
+          .orderBy("date", descending: true)
+          .startAfter([lastMessage.date])
+          .limit(total)
+          .get();
+      await Future.delayed(Duration(seconds: 1));
+    }
+    for (DocumentSnapshot snap in _querySnapshot.docs) {
+      Message _oneMessage = Message.fromMap(snap.data());
+      _allMessage.add(_oneMessage);
+    }
+    return _allMessage;
   }
+
+  Future<String> tokenGet(String who) async {
+    DocumentSnapshot _token =
+        await FirebaseFirestore.instance.doc("tokens/" + who).get();
+    if (_token != null)
+      return _token.data()["token"];
+    else
+      return null;
+  }
+
   @override
-  Future<bool> addStatus(String url, String userId,String description) async {
-    Story saveStoryToMap =Story(description: description,storyUrl: url,userId: userId);
+  Future<bool> addStatus(String url, String userId, String description) async {
+    Story saveStoryToMap =
+        Story(description: description, storyUrl: url, userId: userId);
     await FirebaseFirestore.instance
         .collection("stories")
         .doc(description)
@@ -181,9 +267,8 @@ class FireStoreDbService implements DbBase {
     return true;
   }
 
-
-  Stream<List<Story>> getAllStory()  {
-    var snapShot= FirebaseFirestore.instance
+  Stream<List<Story>> getAllStory() {
+    var snapShot = FirebaseFirestore.instance
         .collection("stories")
         .orderBy("date", descending: true)
         .snapshots();
@@ -193,16 +278,20 @@ class FireStoreDbService implements DbBase {
   }
 
   void deletedConversation(List<String> deletedConversation) {
+    var deleted = FirebaseFirestore.instance.collection("speeches");
 
-    for(var i in deletedConversation)
-      FirebaseFirestore.instance.collection("speeches").doc(i).collection("messages");
-    for(var i in deletedConversation)
-     FirebaseFirestore.instance
-        .collection("speeches")
-        .doc(i).delete();
+    for (var i in deletedConversation) {
+      deleted.doc(i).collection("messages").get().then((snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs) {
+          ds.reference.delete();
+        }
+      });
+      deleted.doc(i).delete();
 
-    print("silindi");
+      print("silindi");
+    }
   }
+
   @override
   Future<List<News>> getAllNews() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -228,7 +317,7 @@ class FireStoreDbService implements DbBase {
     return true;
   }
 
-  Future<bool> createActivity(Activity activity) async{
+  Future<bool> createActivity(Activity activity) async {
     var _kaydedilecekNewsMapYapisi = activity.toMap();
     await FirebaseFirestore.instance
         .collection("activity")
@@ -237,7 +326,7 @@ class FireStoreDbService implements DbBase {
     return true;
   }
 
-  Future<List<Activity>>  getAllActivity() async{
+  Future<List<Activity>> getAllActivity() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("activity")
         .orderBy("createdAt", descending: true)
@@ -251,19 +340,17 @@ class FireStoreDbService implements DbBase {
   }
 
   @override
-  Future<bool> createGroup(Group group) async{
+  Future<bool> createGroup(Group group) async {
     var saveGroupToMap = group.toMap();
     var _myDocumentID = group.docId;
     await FirebaseFirestore.instance
         .collection("groups")
         .doc(_myDocumentID)
         .set(saveGroupToMap);
-    return true;
-  }
 
-  String randomSayiUret() {
-    int rasgeleSayi = Random().nextInt(999999999);
-    return rasgeleSayi.toString();
+
+
+    return true;
   }
 
 }

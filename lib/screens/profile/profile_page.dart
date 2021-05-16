@@ -113,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         builder: (context) {
                           return Container(
                             color: UniversalVeriables.bg,
-                            height: context.dynamicHeight(0.1),
+                            height: context.dynamicHeight(0.3),
                             child: Column(
                               children: [
                                 ListTile(

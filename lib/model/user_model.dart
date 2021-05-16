@@ -22,10 +22,12 @@ class UserModel {
         updatedAt = (map['updatedAt'] as Timestamp).toDate(),
         role = map['role'];
 
-  UserModel.idAndImage(
-      {@required this.userID,
-      @required this.profileURL,
-      @required this.userName});
+  UserModel.idAndImage({
+    @required this.userID,
+    @required this.profileURL,
+    @required this.userName,
+    @required this.role,
+  });
 
   Map<String, dynamic> toMap() {
     return {

@@ -148,6 +148,7 @@ class _MultipleSelectItemsState extends State<MultipleSelectItems> {
             size: 30,
           ),
           onPressed: () {
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(

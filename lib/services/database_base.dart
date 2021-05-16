@@ -3,6 +3,7 @@ import 'package:kbu_app/model/message.dart';
 import 'package:kbu_app/model/news.dart';
 import 'package:kbu_app/model/speech.dart';
 import 'package:kbu_app/model/user_model.dart';
+import 'package:kbu_app/model/groupSpeech.dart';
 
 abstract class DbBase{
 
@@ -12,8 +13,11 @@ abstract class DbBase{
   Future<bool> updateProfilePhoto(String url,String userId);
   Future<List<UserModel>> getAllUser();
   Stream<List<Message>> getMessages(String currentUserID,String chattedUserID);
+  Stream<List<Message>> getGroupMessages(String currentUserID,String chattedUserID);
   Future<bool> saveMessage(Message saveMessage);
+  Future<bool> saveGroupMessage(Message saveMessage);
   Stream<List<Speech>> getAllConversations(String userID);
+  Stream<List<GroupSpeech>> getAllGroupConversation(String userID);
   Future<bool> addStatus(String url,String userId,String description);
   Future<bool> createNews(News news);
   Future<List<News>> getAllNews();

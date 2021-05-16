@@ -70,6 +70,7 @@ class _UsersPageState extends State<UsersPage> {
                     backgroundColor: Colors.transparent,
                   ),
                   onTap: () {
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -263,7 +264,7 @@ class _UsersPageState extends State<UsersPage> {
 
   UserModel connectSupport() {
     UserViewModel _userModel = Provider.of<UserViewModel>(context);
-    UserModel user = _userModel.findUserInListByName("KBU DESTEK");
+    UserModel user = _userModel.findUserInListByName("UNİKA DESTEK");
     print(user);
     return user;
   }

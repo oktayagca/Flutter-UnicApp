@@ -5,12 +5,12 @@ import 'package:kbu_app/model/user_model.dart';
 import 'package:kbu_app/repository/user_repository.dart';
 import 'package:kbu_app/services/locator.dart';
 
-enum ChatViewState{Idle,Loaded,Busy}
+enum GroupChatViewState{Idle,Loaded,Busy}
 
-class ChatViewModel with ChangeNotifier{
+class GroupChatViewModel with ChangeNotifier{
 
   List<Message> _allMessage;
-  ChatViewState _state = ChatViewState.Idle;
+  GroupChatViewState _state = GroupChatViewState.Idle;
   static final total =15;
   UserRepository _userRepository = locator<UserRepository>();
   final UserModel currentUser;
@@ -22,15 +22,15 @@ class ChatViewModel with ChangeNotifier{
   bool _newMessageListener =false;
   StreamSubscription _streamSubscription;
 
-  ChatViewModel({this.currentUser, this.chattedUser}){
+  GroupChatViewModel({this.currentUser, this.chattedUser}){
     _allMessage = [];
     getMessageWithPagination(false);
   }
 
   List<Message> get messageList => _allMessage;
-  ChatViewState get state =>_state;
+  GroupChatViewState get state =>_state;
 
-  set state (ChatViewState value){
+  set state (GroupChatViewState value){
     _state = value;
     notifyListeners();
   }
@@ -43,15 +43,19 @@ class ChatViewModel with ChangeNotifier{
   Future<bool> saveMessage(Message saveMessage,UserModel currentUser) async{
     return await _userRepository.saveMessage(saveMessage,currentUser);
   }
+  Future<bool> saveGroupMessage(Message saveMessage,UserModel currentUser) async{
+    return await _userRepository.saveGroupMessage(saveMessage,currentUser);
+  }
+
   void getMessageWithPagination(bool yeniMesajlarGetiriliyor) async {
     if(_allMessage.length>0){
       _lastMessage = _allMessage.last;
 
     }
     if(!yeniMesajlarGetiriliyor)
-      state =ChatViewState.Busy;
+      state =GroupChatViewState.Busy;
 
-    var comingMessage = await _userRepository.getMessageWithPagination(
+    var comingMessage = await _userRepository.getGroupMessageWithPagination(
         currentUser.userID, chattedUser.userID, _lastMessage, total);
 
     if(comingMessage.length<total){
@@ -60,8 +64,8 @@ class ChatViewModel with ChangeNotifier{
 
     _allMessage.addAll(comingMessage);
     if(_allMessage.length>0){
-    _firstMessageInList = _allMessage.first;}
-    state = ChatViewState.Loaded;
+      _firstMessageInList = _allMessage.first;}
+    state = GroupChatViewState.Loaded;
 
     if(_newMessageListener ==false){
       _newMessageListener =true;
@@ -83,7 +87,7 @@ class ChatViewModel with ChangeNotifier{
 
   void newMessageListenerAssign() {
     print("Listener yeni mesjlar için atandı");
-    _streamSubscription=_userRepository.getMessages(currentUser.userID, chattedUser.userID).listen((currentData) {
+    _streamSubscription=_userRepository.getGroupMessages(currentUser.userID, chattedUser.userID).listen((currentData) {
       if(currentData.isNotEmpty){
         print("Listener tetiklendi ve son getirilen veri:"+currentData[0].toString());
 
@@ -94,7 +98,7 @@ class ChatViewModel with ChangeNotifier{
           }else if(_firstMessageInList.date.millisecondsSinceEpoch != currentData[0].date.millisecondsSinceEpoch){
             _allMessage.insert(0, currentData[0]);}
         }
-        state = ChatViewState.Loaded;
+        state = GroupChatViewState.Loaded;
       }
     });
   }

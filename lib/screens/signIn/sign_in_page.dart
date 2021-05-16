@@ -7,7 +7,6 @@ import 'package:kbu_app/utils/universal_veriables.dart';
 import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/social_login_button.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:kbu_app/widgets/context_extension.dart';
 
 // ignore: must_be_immutable
@@ -38,50 +37,51 @@ class SignInPage extends StatelessWidget {
               child: new Text(
             "Unicapp",
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: ResponsiveFlutter.of(context).fontSize(3.5),
-            ),
+            style: TextStyle(fontSize: 24),
           )),
           elevation: 0,
-          backgroundColor: UniversalVeriables.appBarColor,
+          backgroundColor: UniversalVeriables.bg,
         ),
         backgroundColor: UniversalVeriables.bg,
         body: Container(
-          padding: context.paddingAllLow,
-          child: Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  getTranslated(context, "Sign In"),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: ResponsiveFlutter.of(context).fontSize(2),
-                      color: Colors.white),
-                ),
-                SizedBox(
-                  height: context.dynamicHeight(0.1),
-                ),
-                SocialLoginButton(
-                  butonColor: UniversalVeriables.signInColor,
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                getTranslated(context, "Sign In"),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                    color: Colors.white),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              FittedBox(
+                child: SocialLoginButton(
                   onPressed: () => _signInGoogle(context),
                   butonIcon: Image(
+                    height: 30,
                     image: AssetImage("image/gmail.png"),
                   ),
-                  butonText: getTranslated(context,
-                      "Sign in with Gmail and Password"), //farklı mail adresi ile olan
+                  butonText:
+                      getTranslated(context, "Sign in with Gmail and Password"),
+                  //farklı mail adresi ile olan
                   textColor: Colors.white,
                   radius: 16,
                   height: context.dynamicHeight(0.1),
                 ),
-                SizedBox(
-                  height: context.dynamicHeight(0.02),
-                ),
-                SocialLoginButton(
-                  butonColor: UniversalVeriables.signInColor,
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              FittedBox(
+                child: SocialLoginButton(
+                  butonColor: UniversalVeriables.blueColor,
                   butonText:
                       getTranslated(context, "Sign in with Email and Password"),
                   textColor: Colors.white,
@@ -91,11 +91,12 @@ class SignInPage extends StatelessWidget {
                   },
                   height: context.dynamicHeight(0.1),
                   butonIcon: Image(
+                    height: 30,
                     image: AssetImage("image/kbu.png"),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ));
   }

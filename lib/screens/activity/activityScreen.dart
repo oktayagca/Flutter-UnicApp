@@ -80,7 +80,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                     ),
                                   ),
                                   child: Padding(
-                                    padding: context.paddingAllLow,
+                                    padding: context.paddingAllLoww,
                                     child: Row(
                                       children: [
                                         SizedBox(

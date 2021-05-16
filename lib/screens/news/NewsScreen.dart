@@ -81,7 +81,7 @@ class _NewsPageState extends State<NewsPage> {
                                   ),
                                   margin: context.marginAllLow,
                                   child: Padding(
-                                    padding: context.paddingAllLow,
+                                    padding: context.paddingAllLoww,
                                     child: Row(
                                       children: [
                                         Container(

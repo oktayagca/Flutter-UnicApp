@@ -7,6 +7,7 @@ class Group{
   String groupImgUrl;
   String administrator;
   String docId;
+  String role;
   List<dynamic> members = [];
   DateTime createdAt;
   DateTime updatedAt;
@@ -16,6 +17,7 @@ class Group{
     this.groupImgUrl,
     this.administrator,
     this.docId,
+    this.role,
     this.members,
     this.createdAt,
     this.updatedAt
@@ -26,7 +28,8 @@ class Group{
       'groupName': groupName,
       'groupImgUrl': groupImgUrl ?? 'https://img.favpng.com/25/7/19/users-group-computer-icons-png-favpng-WKWD9rqs5kwcviNe9am7xgiPx.jpg',
       'administrator': administrator,
-      'docId':groupName+randomSayiUret(),
+      'docId':docId,
+      'role':role,
       'members': members,
       'createdAt': createdAt ?? FieldValue.serverTimestamp(),
       'updatedAt': updatedAt ?? FieldValue.serverTimestamp(),
@@ -38,18 +41,15 @@ class Group{
         groupImgUrl = map['groupImgUrl'],
         administrator = map['administrator'],
         docId = map['docId'],
+        role = map['role'],
         members = map['members'],
         createdAt = map['createdAt'],
         updatedAt = map['updatedAt'];
 
   @override
   String toString() {
-    return 'Group{groupName: $groupName, groupImgUrl: $groupImgUrl, administrator: $administrator,docId: $docId, members: $members, createdAt: $createdAt, updatedAt: $updatedAt,}';
+    return 'Group{groupName: $groupName, groupImgUrl: $groupImgUrl, administrator: $administrator,docId: $docId,role:$role, members: $members, createdAt: $createdAt, updatedAt: $updatedAt,}';
   }
 
-  String randomSayiUret() {
-    int rasgeleSayi = Random().nextInt(999999999);
-    return rasgeleSayi.toString();
-  }
 
 }

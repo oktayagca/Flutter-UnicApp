@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 
 class SocialLoginButton extends StatelessWidget {
   final String butonText;
@@ -39,16 +40,16 @@ class SocialLoginButton extends StatelessWidget {
               Text(
                 butonText,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: textColor, fontSize: 18),
+                style: TextStyle(color: textColor, fontSize: ResponsiveFlutter.of(context).fontSize(2)),
               ),
-              Opacity(opacity: 0, child: butonIcon) //görünürlük ayarı:
+              Opacity(opacity: 0, child: butonIcon)
             ],
             if (butonIcon == null) ...[
               Container(),
               Text(
                 butonText,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: textColor, fontSize: 18),
+                style: TextStyle(color: textColor, fontSize: ResponsiveFlutter.of(context).fontSize(2)),
               ),
               Opacity(opacity: 0, child: Container())
             ]

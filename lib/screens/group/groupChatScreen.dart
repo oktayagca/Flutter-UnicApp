@@ -7,17 +7,18 @@ import 'package:kbu_app/localization/localization_constants.dart';
 import 'package:kbu_app/model/message.dart';
 import 'package:kbu_app/model/user_model.dart';
 import 'package:kbu_app/utils/universal_veriables.dart';
-import 'package:kbu_app/view_model/chat_view_model.dart';
+import 'package:kbu_app/view_model/groupChat_view_model.dart';
+import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:kbu_app/widgets/context_extension.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
 
-class ChatScreen extends StatefulWidget {
+class GroupChatScreen extends StatefulWidget {
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _GroupChatScreenState createState() => _GroupChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _GroupChatScreenState extends State<GroupChatScreen> {
   bool isWriting = false;
   var _messageController = TextEditingController();
   ScrollController _scrollController = new ScrollController();
@@ -32,7 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _chatModel = Provider.of<ChatViewModel>(context);
+    final _chatModel = Provider.of<GroupChatViewModel>(context);
     return Scaffold(
       backgroundColor: UniversalVeriables.bg,
       appBar: AppBar(
@@ -49,24 +50,24 @@ class _ChatScreenState extends State<ChatScreen> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: _chatModel.state == ChatViewState.Busy
+      body: _chatModel.state == GroupChatViewState.Busy
           ? Center(
-              child: CircularProgressIndicator(),
-            )
+        child: CircularProgressIndicator(),
+      )
           : Center(
-              child: Column(
-                children: [
-                  buildMessageList(),
-                  chatControls(),
-                ],
-              ),
-            ),
+        child: Column(
+          children: [
+            buildMessageList(),
+            chatControls(),
+          ],
+        ),
+      ),
     );
   }
 
   Widget buildMessageList() {
 
-    return Consumer<ChatViewModel>(
+    return Consumer<GroupChatViewModel>(
       builder: (context, chatModel, child) {
         return Expanded(
           child: ListView.builder(
@@ -95,7 +96,7 @@ class _ChatScreenState extends State<ChatScreen> {
       });
     }
 
-    final _chatModel = Provider.of<ChatViewModel>(context);
+    final _chatModel = Provider.of<GroupChatViewModel>(context);
 
     UserModel _currentUser = _chatModel.currentUser;
     UserModel _chattedUser = _chatModel.chattedUser;
@@ -103,114 +104,117 @@ class _ChatScreenState extends State<ChatScreen> {
     return _chattedUser.role.contains("Admin")
         ? Container()
         : Container(
-            color: UniversalVeriables.bg,
-            height: context.dynamicHeight(0.1),
-            padding: context.paddingAllLow,
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    onChanged: (value) {
-                      (value.length > 0 && value.trim() != "")
-                          ? setWritingTo(true)
-                          : setWritingTo(false);
-                    },
-                    controller: _messageController,
-                    cursorColor: Colors.blueGrey,
-                    style: new TextStyle(
-                        fontSize: ResponsiveFlutter.of(context).fontSize(2),
-                        color: UniversalVeriables.appBarColor),
-                    decoration: InputDecoration(
-                        prefixIcon: GestureDetector(
-                          child: Icon(
-                            Icons.emoji_emotions_sharp,
-                            size: 30,
-                            color: Colors.grey,
-                          ),
-                          onTap: () {},
-                        ),
-                        fillColor: UniversalVeriables.bg,
-                        filled: true,
-                        hintText: getTranslated(context, "Write a message"),
-                        hintStyle:
-                            TextStyle(color: UniversalVeriables.greyColor),
-                        border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(30.0),
-                            borderSide: BorderSide.none)),
+      color: UniversalVeriables.bg,
+      height: context.dynamicHeight(0.1),
+      padding: context.paddingAllLow,
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              onChanged: (value) {
+                (value.length > 0 && value.trim() != "")
+                    ? setWritingTo(true)
+                    : setWritingTo(false);
+              },
+              controller: _messageController,
+              cursorColor: Colors.blueGrey,
+              style: new TextStyle(
+                  fontSize: ResponsiveFlutter.of(context).fontSize(2),
+                  color: UniversalVeriables.appBarColor),
+              decoration: InputDecoration(
+                  prefixIcon: GestureDetector(
+                    child: Icon(
+                      Icons.emoji_emotions_sharp,
+                      size: 30,
+                      color: Colors.grey,
+                    ),
+                    onTap: () {},
                   ),
-                ),
-                isWriting
-                    ? Container()
-                    : Padding(
-                        padding: context.paddingAllLow,
-                        child: InkWell(
-                          child: Icon(
-                            Icons.attach_file,
-                            size: 30,
-                            color: UniversalVeriables.greyColor,
-                          ),
-                          onTap: () {},
-                        ),
-                      ),
-                isWriting
-                    ? Container()
-                    : Padding(
-                        padding: context.paddingAllLow,
-                        child: InkWell(
-                          child: Icon(
-                            Icons.camera_alt,
-                            size: 30,
-                            color: UniversalVeriables.greyColor,
-                          ),
-                          onTap: () {},
-                        ),
-                      ),
-                isWriting
-                    ? Padding(
-                        padding: context.paddingAllLow,
-                        child: Container(
-                            color: Colors.transparent,
-                            margin: context.marginAllLow,
-                            child: InkWell(
-                              child: Icon(
-                                Icons.send,
-                                size: 30,
-                                color: UniversalVeriables.appBarColor,
-                              ),
-                              onTap: () async {
-                                if (_messageController.text.trim().length > 0) {
-                                  Message _saveMessage = Message(
-                                    fromWho: _currentUser.userID,
-                                    who: _chattedUser.userID,
-                                    fromMe: true,
-                                    message: _messageController.text,
-                                  );
-                                  var result = await _chatModel.saveMessage(
-                                      _saveMessage, _currentUser);
-                                  if (result) {
-                                    _messageController.clear();
-                                    setWritingTo(false);
-                                    _scrollController.animateTo(0.0,
-                                        duration:
-                                            const Duration(milliseconds: 30),
-                                        curve: Curves.easeOut);
-                                  }
-                                }
-                              },
-                            )),
-                      )
-                    : Container()
-              ],
+                  fillColor: UniversalVeriables.bg,
+                  filled: true,
+                  hintText: getTranslated(context, "Write a message"),
+                  hintStyle:
+                  TextStyle(color: UniversalVeriables.greyColor),
+                  border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(30.0),
+                      borderSide: BorderSide.none)),
             ),
-          );
+          ),
+          isWriting
+              ? Container()
+              : Padding(
+            padding: context.paddingAllLow,
+            child: InkWell(
+              child: Icon(
+                Icons.attach_file,
+                size: 30,
+                color: UniversalVeriables.greyColor,
+              ),
+              onTap: () {},
+            ),
+          ),
+          isWriting
+              ? Container()
+              : Padding(
+            padding: context.paddingAllLow,
+            child: InkWell(
+              child: Icon(
+                Icons.camera_alt,
+                size: 30,
+                color: UniversalVeriables.greyColor,
+              ),
+              onTap: () {},
+            ),
+          ),
+          isWriting
+              ? Padding(
+            padding: context.paddingAllLow,
+            child: Container(
+                color: Colors.transparent,
+                margin: context.marginAllLow,
+                child: InkWell(
+                  child: Icon(
+                    Icons.send,
+                    size: 30,
+                    color: UniversalVeriables.appBarColor,
+                  ),
+                  onTap: () async {
+                    if (_messageController.text.trim().length > 0) {
+                      Message _saveMessage = Message(
+                        fromWho: _currentUser.userID,
+                        who: _chattedUser.userID,
+                        fromMe: true,
+                        message: _messageController.text,
+                      );
+                      var result = await _chatModel.saveGroupMessage(
+                          _saveMessage, _currentUser);
+                      if (result) {
+                        _messageController.clear();
+                        setWritingTo(false);
+                        _scrollController.animateTo(0.0,
+                            duration:
+                            const Duration(milliseconds: 30),
+                            curve: Curves.easeOut);
+                      }
+                    }
+                  },
+                )),
+          )
+              : Container()
+        ],
+      ),
+    );
   }
 
   //BURAYA BAKKK
 
   Widget _createSpeechBubble(Message currentMessage) {
-    final _chatModel = Provider.of<ChatViewModel>(context);
+    final _chatModel = Provider.of<GroupChatViewModel>(context);
+    final _userModel = Provider.of<UserViewModel>(context);
     Color _incomingMessageColor = UniversalVeriables.receiverColor;
     Color _goingMessageColor = UniversalVeriables.buttonColor;
+    var userInList = _userModel
+        .findUserInList((currentMessage.fromWho));
 
     var _time = "";
 
@@ -220,8 +224,8 @@ class _ChatScreenState extends State<ChatScreen> {
       print("Hata var: " + e.toString());
     }
 
-    var _fromMe = currentMessage.fromMe;
-    if (_fromMe) {
+    var _fromMe = currentMessage.fromWho;
+    if (_fromMe == _chatModel.currentUser.userID) {
       return Padding(
         padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: Column(
@@ -271,6 +275,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       );
     } else {
+
       return Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: Column(
@@ -280,7 +285,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 CircleAvatar(
                   backgroundImage:
-                      NetworkImage(_chatModel.chattedUser.profileURL),
+                  NetworkImage(userInList.profileURL),
                 ),
                 Flexible(
                   child: Container(
@@ -291,13 +296,21 @@ class _ChatScreenState extends State<ChatScreen> {
                     padding: context.paddingAllLoww,
                     margin: context.marginAllLow,
                     child: Stack(overflow: Overflow.visible, children: [
+                      Text(
+                            userInList.userName,
+                            style: TextStyle(
+                              color: Colors.tealAccent,
+                              fontSize: ResponsiveFlutter.of(context).fontSize(1.7),
+                            ),
+                          ),
+                     SizedBox(height: 20.0),
                       Padding(
-                        padding: context.paddingAllLoww,
+                        padding: context.paddingAllLowww,
                         child: Text(
                           currentMessage.message,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: ResponsiveFlutter.of(context).fontSize(2),
+                            fontSize: ResponsiveFlutter.of(context).fontSize(2.0),
                           ),
                         ),
                       ),
@@ -333,14 +346,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _scrollListener() {
     if (_scrollController.offset >=
-            _scrollController.position.maxScrollExtent &&
+        _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
       bringOldMessages();
     }
   }
 
   void bringOldMessages() async {
-    final _chatModel = Provider.of<ChatViewModel>(context);
+    final _chatModel = Provider.of<GroupChatViewModel>(context);
     if (_isLoading == false) {
       _isLoading = true;
       await _chatModel.bringOldMessages();

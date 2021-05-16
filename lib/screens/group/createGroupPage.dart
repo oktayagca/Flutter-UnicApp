@@ -1,11 +1,13 @@
 import 'dart:io';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kbu_app/localization/localization_constants.dart';
 import 'package:kbu_app/model/group.dart';
 import 'package:kbu_app/model/user_model.dart';
+import 'package:kbu_app/screens/group/groupChatScreen.dart';
 import 'package:kbu_app/utils/universal_veriables.dart';
+import 'package:kbu_app/view_model/groupChat_view_model.dart';
 import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/social_login_button.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +15,9 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class CreateGroup extends StatefulWidget {
   var selectedUsers = [];
+
   CreateGroup({this.selectedUsers});
+
   @override
   _CreateGroupState createState() => _CreateGroupState();
 }
@@ -21,25 +25,45 @@ class CreateGroup extends StatefulWidget {
 class _CreateGroupState extends State<CreateGroup> {
 
   TextEditingController groupNameController = TextEditingController();
-
   File _groupImg;
   final picker = ImagePicker();
   Group _group;
-
-  void _createGroup(String groupName) async{
+  UserModel user;
+  Future<Widget> _createGroup(String groupName)  async{
+    var url;
     final _userModel = Provider.of<UserViewModel>(context);
-    UserModel user = await _userModel.currentUser();
-      _group = Group(
-      groupName: groupName,
+    _group = Group(
+      docId: groupNameController.text + "--" + Random().nextInt(4294967296).toString(),
+      groupName: groupNameController.text,
+      role: "Group",
       administrator: user.userID,
       members: widget.selectedUsers,
     );
+    widget.selectedUsers.add(user.userID);
     if (_groupImg != null) {
-      var url = await _userModel.uploadGroupFile(_group.groupName, "group_img", _groupImg, "group_Img.png");
+       url = await _userModel.uploadGroupFile(
+          _group.groupName, "group_img", _groupImg, "group_Img.png");
       print("Group Image Url :" + url);
-      _group.groupImgUrl=url;
+       _group.groupImgUrl = url;
     }
-    _userModel.createGroup(_group);
+   setState(() {
+     _userModel.createGroup(_group);
+   });
+    if(url != null){
+      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: false)
+          .push(MaterialPageRoute(
+          builder: (context) => ChangeNotifierProvider(
+            builder: (context) => GroupChatViewModel(
+                currentUser: _userModel.user,
+                chattedUser: UserModel.idAndImage(userID: _group.docId, profileURL: _group.groupImgUrl, userName: _group.groupName,role:_group.role)),
+            child: GroupChatScreen(),
+          )));
+    }
+    else{
+      return Center(child: CircularProgressIndicator());
+    }
+
   }
 
   Future _shootWithCamera() async {
@@ -61,6 +85,9 @@ class _CreateGroupState extends State<CreateGroup> {
 
   @override
   Widget build(BuildContext context) {
+    final _userModel = Provider.of<UserViewModel>(context);
+     user =_userModel.user;
+
     return Scaffold(
       backgroundColor: UniversalVeriables.bg,
       appBar: AppBar(
@@ -87,14 +114,16 @@ class _CreateGroupState extends State<CreateGroup> {
                               children: [
                                 ListTile(
                                   leading: Icon(Icons.camera),
-                                  title: Text(getTranslated(context, "Capture From Camera")),
+                                  title: Text(getTranslated(
+                                      context, "Capture From Camera")),
                                   onTap: () {
                                     _shootWithCamera();
                                   },
                                 ),
                                 ListTile(
                                   leading: Icon(Icons.image),
-                                  title: Text(getTranslated(context, "Select From Gallery")),
+                                  title: Text(getTranslated(
+                                      context, "Select From Gallery")),
                                   onTap: () {
                                     _chooseFromGallery();
                                   },
@@ -120,14 +149,14 @@ class _CreateGroupState extends State<CreateGroup> {
                   child: Column(
                     children: [
                       TextFormField(
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.grey),
                         controller: groupNameController,
                         decoration: InputDecoration(
 
                           hintText: getTranslated(context, "Group Name"),
                           labelText: getTranslated(context, "Group Name"),
-                          labelStyle: TextStyle(color: Colors.white),
-                          hintStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: Colors.grey),
+                          hintStyle: TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -153,9 +182,7 @@ class _CreateGroupState extends State<CreateGroup> {
                         height: 40,
                         onPressed: () => {
                           _createGroup(groupNameController.text),
-                          Navigator.pop(context),
-                          Navigator.pop(context),
-                        },
+                      },
                       ),
                     ],
                   ),
