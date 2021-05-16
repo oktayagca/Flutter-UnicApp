@@ -8,7 +8,9 @@ import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/app_bar.dart';
 import 'package:kbu_app/widgets/custom-drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'create_news_page.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
 
 class NewsPage extends StatefulWidget {
   @override
@@ -29,14 +31,14 @@ class _NewsPageState extends State<NewsPage> {
       actions: [
         Builder(
             builder: (context) => IconButton(
-              icon: Icon(
-                Icons.menu,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer(); //popup menü
-              },
-            )),
+                  icon: Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer(); //popup menü
+                  },
+                )),
       ],
     );
   }
@@ -72,55 +74,67 @@ class _NewsPageState extends State<NewsPage> {
                                     border: Border(
                                       bottom: BorderSide(
                                         color:
-                                        UniversalVeriables.seperatorColor,
-                                        width: 1.4,
+                                            UniversalVeriables.seperatorColor,
+                                        width: context.dynamicWidth(0.001),
                                       ),
                                     ),
                                   ),
-                                  margin: EdgeInsets.only(bottom: 20.0),
+                                  margin: context.marginAllLow,
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
+                                    padding: context.paddingAllLow,
                                     child: Row(
                                       children: [
                                         Container(
-                                          width: 80.0,
-                                          height: 80.0,
+                                          width: context.dynamicWidth(0.2),
+                                          height: context.dynamicHeight(0.2),
                                           decoration: BoxDecoration(
                                             image: DecorationImage(
                                               image: NetworkImage(news.imgURL),
                                               fit: BoxFit.cover,
                                             ),
                                             borderRadius:
-                                            BorderRadius.circular(8.0),
+                                                BorderRadius.circular(8.0),
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 5.0,
+                                          width: context.dynamicWidth(0.01),
                                         ),
                                         Expanded(
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                                MainAxisAlignment.start,
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 news.title,
                                                 style: TextStyle(
-                                                  fontSize: 18.0,
-                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize:
+                                                      ResponsiveFlutter.of(
+                                                              context)
+                                                          .fontSize(2.5),
+                                                  color: UniversalVeriables
+                                                      .appBarColor,
                                                 ),
                                               ),
                                               SizedBox(
-                                                height: 5.0,
+                                                height:
+                                                    context.dynamicHeight(0.01),
                                               ),
                                               Column(
                                                 children: [
                                                   Text(
                                                     news.content,
                                                     style: TextStyle(
-                                                      fontSize: 14.0,
-                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          ResponsiveFlutter.of(
+                                                                  context)
+                                                              .fontSize(2),
+                                                      color: UniversalVeriables
+                                                          .greyColor,
                                                     ),
                                                   ),
                                                 ],
@@ -152,13 +166,15 @@ class _NewsPageState extends State<NewsPage> {
                                 children: [
                                   Icon(
                                     Icons.supervised_user_circle,
-                                    color: Colors.blue,
+                                    color: UniversalVeriables.buttonColor,
                                     size: 120,
                                   ),
                                   Text(
                                     getTranslated(context, "No news yet"),
                                     style: TextStyle(
-                                        fontSize: 36, color: Colors.white),
+                                        fontSize: ResponsiveFlutter.of(context)
+                                            .fontSize(5),
+                                        color: UniversalVeriables.greyColor),
                                   ),
                                 ],
                               ),
@@ -193,7 +209,7 @@ class _NewsPageState extends State<NewsPage> {
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [Color(0xff00b6f3), Color(0xff0184dc)],
+                colors: [Color(0xff0353a4), Color(0xff0353a4)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight),
             borderRadius: BorderRadius.circular(50),
@@ -211,11 +227,10 @@ class _NewsPageState extends State<NewsPage> {
               );
             },
           ),
-          padding: EdgeInsets.all(1),
+          padding: context.paddingAllLow,
         ),
       );
-    }
-    else{
+    } else {
       return Container();
     }
   }

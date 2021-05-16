@@ -10,6 +10,8 @@ import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/app_bar.dart';
 import 'package:kbu_app/widgets/custom-drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 
 import 'store_page_view.dart';
 import 'story_add.dart';
@@ -98,162 +100,187 @@ class _StatusScreenState extends State<StatusScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-           _userModel.user.role.contains("Admin") ? GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        color: UniversalVeriables.bg,
-                        height: 150,
-                        child: Column(
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
+            _userModel.user.role.contains("Admin")
+                ? GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                              color: UniversalVeriables.bg,
+                              height: context.dynamicHeight(0.1),
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: Icon(
+                                      Icons.camera_alt,
+                                      color: UniversalVeriables.greyColor,
+                                    ),
+                                    title: Text(
+                                      getTranslated(
+                                          context, "Capture From Camera"),
+                                      style: TextStyle(
+                                          color: UniversalVeriables.greyColor),
+                                    ),
+                                    onTap: () {
+                                      _takePhoto();
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: Icon(
+                                      Icons.image,
+                                      color: UniversalVeriables.greyColor,
+                                    ),
+                                    title: Text(
+                                        getTranslated(
+                                            context, "Select From Gallery"),
+                                        style: TextStyle(
+                                            color:
+                                                UniversalVeriables.greyColor)),
+                                    onTap: () {
+                                      chooseGallery();
+                                    },
+                                  )
+                                ],
                               ),
-                              title: Text(
-                                getTranslated(context, "Capture From Camera"),
-                                style: TextStyle(color: Colors.white),
+                            );
+                          });
+                    },
+                    child: Card(
+                      color: UniversalVeriables.bg,
+                      elevation: 0.0,
+                      child: Padding(
+                        padding: context.paddingAllLow,
+                        child: ListTile(
+                          leading: Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundImage:
+                                    NetworkImage(_userModel.user.profileURL),
                               ),
-                              onTap: () {
-                                _takePhoto();
-                              },
+                              Positioned(
+                                bottom: 0.0,
+                                right: 1.0,
+                                child: Container(
+                                    height: context.dynamicHeight(0.1),
+                                    width: context.dynamicWidth(0.1),
+                                    child: Icon(
+                                      Icons.add,
+                                      color: UniversalVeriables.appBarColor,
+                                      size: 15,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                    )),
+                              ),
+                            ],
+                          ),
+                          title: Text(
+                            "Duyurular",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: UniversalVeriables.appBarColor,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(2.5),
                             ),
-                            ListTile(
-                              leading: Icon(
-                                Icons.image,
-                                color: Colors.white,
-                              ),
-                              title: Text(getTranslated(context, "Select From Gallery"),
-                                  style: TextStyle(color: Colors.white)),
-                              onTap: () {
-                                chooseGallery();
-                              },
-                            )
-                          ],
+                          ),
+                          subtitle: Text(
+                            "Duyuru eklemek için dokunun",
+                            style: TextStyle(
+                              color: UniversalVeriables.greyColor,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(1.75),
+                            ),
+                          ),
                         ),
-                      );
-                    });
-              },
-              child: Card(
-                color: UniversalVeriables.bg,
-                elevation: 0.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: ListTile(
-                    leading: Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(
-                              _userModel.user.profileURL),
-                        ),
-                        Positioned(
-                          bottom: 0.0,
-                          right: 1.0,
-                          child: Container(
-                              height: 20,
-                              width: 20,
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 15,
-                              ),
-                              decoration: BoxDecoration(
-                                color: UniversalVeriables.blueColor,
-                                shape: BoxShape.circle,
-                              )),
-                        ),
-                      ],
+                      ),
                     ),
-                    title: Text(
-                      "Duyurular",
+                  )
+                : Container(),
+            _userModel.user.role.contains("Admin")
+                ? Padding(
+                    padding: context.paddingAllLow,
+                    child: Text(
+                      getTranslated(context, "Added announcements"),
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
+                        color: UniversalVeriables.appBarColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: ResponsiveFlutter.of(context).fontSize(2.5),
+                      ),
                     ),
-                    subtitle: Text(
-                      "Duyuru eklemek için dokunun",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                ),
-              ),
-            ) : Container(),
-            _userModel.user.role.contains("Admin") ? Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Text(
-                getTranslated(context, "Added announcements"),
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ) : Container(),
+                  )
+                : Container(),
             Expanded(
               child: Center(
                 child: StreamBuilder<List<Story>>(
-                    stream: _userModel.getAllStory(),
-                    builder: (context, streamConversationList) {
-                      if (!streamConversationList.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-
-                      List<Story> allStories = streamConversationList.data;
-                      return ListView.builder(
-                        itemCount: allStories.length,
-                        reverse: false,
-                        itemBuilder: (context, index) {
-                          try {
-                            _time = _showTime(allStories[index].date ?? Timestamp(1, 1));
-                            print(allStories[index].description );
-                          } catch (e) {
-                            print("Hata var: " + e.toString());
-                          }
-                          return Padding(
-                            padding: const EdgeInsets.all(0.0),
-                            child: Theme(
-                              data: ThemeData(
-                                splashColor: UniversalVeriables.blueColor,
-                              ),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom:
-                                              BorderSide(color: Colors.grey.shade900))),
-                                  padding: const EdgeInsets.all(8.0),
-                                    child:
-                                        ListTile(
-                                          leading: CircleAvatar(
-                                            radius: 30,
-                                            backgroundImage: NetworkImage(
-                                                allStories[index].storyUrl),
-                                          ),
-                                          title: Text(
-                                            allStories[index].description,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white),
-                                          ),
-                                          subtitle: Text(
-                                            _time,
-                                            style: TextStyle(color: Colors.grey),
-                                          ),
-                                          onTap: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => StoryPageView(allStories[index].storyUrl))),
-                                        ),
-                                ),
-                            ),
-                          );
-                        },
+                  stream: _userModel.getAllStory(),
+                  builder: (context, streamConversationList) {
+                    if (!streamConversationList.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
                       );
-                    },
-                  ),
+                    }
+
+                    List<Story> allStories = streamConversationList.data;
+                    return ListView.builder(
+                      itemCount: allStories.length,
+                      reverse: false,
+                      itemBuilder: (context, index) {
+                        try {
+                          _time = _showTime(
+                              allStories[index].date ?? Timestamp(1, 1));
+                          print(allStories[index].description);
+                        } catch (e) {
+                          print("Hata var: " + e.toString());
+                        }
+                        return Padding(
+                          padding: context.paddingAllLow,
+                          child: Theme(
+                            data: ThemeData(
+                              splashColor: UniversalVeriables.blueColor,
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Colors.grey.shade900))),
+                              padding: context.paddingAllLow,
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  radius: 30,
+                                  backgroundImage:
+                                      NetworkImage(allStories[index].storyUrl),
+                                ),
+                                title: Text(
+                                  allStories[index].description,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: ResponsiveFlutter.of(context)
+                                          .fontSize(2),
+                                      color: UniversalVeriables.greyColor),
+                                ),
+                                subtitle: Text(
+                                  _time,
+                                  style: TextStyle(
+                                      fontSize: ResponsiveFlutter.of(context)
+                                          .fontSize(1.5),
+                                      color: UniversalVeriables.greyColor),
+                                ),
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => StoryPageView(
+                                            allStories[index].storyUrl))),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],

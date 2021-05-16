@@ -9,6 +9,8 @@ import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/platform_alert_dialog.dart';
 import 'package:kbu_app/widgets/social_login_button.dart';
 import 'package:provider/provider.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 
 enum FormType { Register, LogIn }
 
@@ -36,9 +38,9 @@ class _EmailLoginState extends State<EmailLogin> {
           print("oturum açan user id:" + _loginUser.userID.toString());
       } catch (e) {
         PlatformAlertDialog(
-            title: getTranslated(context, "Login error"),
-            content: ErrorException.show(e.code),
-            mainAction: getTranslated(context, "Ok"))
+                title: getTranslated(context, "Login error"),
+                content: ErrorException.show(e.code),
+                mainAction: getTranslated(context, "Ok"))
             .show(context);
       }
     } else {
@@ -66,7 +68,9 @@ class _EmailLoginState extends State<EmailLogin> {
 
   @override
   Widget build(BuildContext context) {
-    _butonText = _formType == FormType.LogIn ? getTranslated(context, "Sign In") : getTranslated(context, "Register");
+    _butonText = _formType == FormType.LogIn
+        ? getTranslated(context, "Sign In")
+        : getTranslated(context, "Register");
     _linkText = _formType == FormType.LogIn
         ? getTranslated(context, "Don't have an account? Sign Up")
         : getTranslated(context, "Sign In");
@@ -82,27 +86,30 @@ class _EmailLoginState extends State<EmailLogin> {
     return Scaffold(
         appBar: AppBar(
           title: new Center(
-              child: new Text(
-                getTranslated(context, "Login / Register"),
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 24),
-          )),
+              child: new Text(getTranslated(context, "Login / Register"),
+                  textAlign: TextAlign.center, //yamuk duruyor
+                  style: TextStyle(
+                      fontSize: ResponsiveFlutter.of(context).fontSize(3.5),
+                      color: Colors.white))),
           elevation: 0,
-          backgroundColor: UniversalVeriables.bg,
+          backgroundColor: UniversalVeriables.appBarColor,
         ),
         backgroundColor: UniversalVeriables.bg,
         body: _userModel.state == ViewState.Idle
             ? Center(
-              child: SingleChildScrollView(
-                  child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                    child: Padding(
+                  padding: context.paddingAllLow,
                   child: Form(
                     key: _formKey,
                     child: Column(
                       children: [
                         TextFormField(
                           initialValue: "2015010206033@ogrenci.karabuk.edu.tr",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            color: UniversalVeriables.greyColor,
+                            fontSize: ResponsiveFlutter.of(context).fontSize(2),
+                          ),
                           onSaved: (String input) {
                             _email = input;
                           },
@@ -110,28 +117,32 @@ class _EmailLoginState extends State<EmailLogin> {
                             errorText: _userModel.emailMessage != null
                                 ? _userModel.emailMessage
                                 : null,
-                            prefixIcon: Icon(Icons.mail, color: Colors.white),
+                            prefixIcon: Icon(Icons.mail,
+                                color: UniversalVeriables.greyColor),
                             hintText: 'E-Mail',
                             hintStyle: TextStyle(
-                              color: Colors.white,
+                              color: UniversalVeriables.greyColor,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(1.5),
                             ),
                             labelText: 'E-Mail',
                             labelStyle: TextStyle(
-                              color: Colors.white,
+                              color: UniversalVeriables.greyColor,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(2.5),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: UniversalVeriables.blueColor),
+                              borderSide: BorderSide(
+                                  color: UniversalVeriables.blueColor),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: context.dynamicHeight(0.01)),
                         TextFormField(
                           initialValue: "password",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: UniversalVeriables.greyColor,
+                            fontSize: ResponsiveFlutter.of(context).fontSize(2),
                           ),
                           onSaved: (String input) {
                             _password = input;
@@ -142,48 +153,53 @@ class _EmailLoginState extends State<EmailLogin> {
                             errorText: _userModel.passwordMessage != null
                                 ? _userModel.passwordMessage
                                 : null,
-                            prefixIcon: Icon(Icons.mail, color: Colors.white),
-                            hintText: getTranslated(context,"Password"),
+                            prefixIcon: Icon(Icons.mail,
+                                color: UniversalVeriables.griColor),
+                            hintText: getTranslated(context, "Password"),
                             hintStyle: TextStyle(
-                              color: Colors.white,
+                              color: UniversalVeriables.greyColor,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(1.5),
                             ),
-                            labelText: getTranslated(context,"Password"),
+                            labelText: getTranslated(context, "Password"),
                             labelStyle: TextStyle(
-                              color: Colors.white,
+                              color: UniversalVeriables.greyColor,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(2.5),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: UniversalVeriables.blueColor),
+                              borderSide: BorderSide(
+                                  color: UniversalVeriables.blueColor),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: context.dynamicHeight(0.04)),
                         SocialLoginButton(
-                          butonColor: UniversalVeriables.blueColor,
+                          butonColor: UniversalVeriables.signInColor,
                           butonText: _butonText,
                           textColor: Colors.white,
                           radius: 16,
                           onPressed: () {
                             _formsubmit(context);
                           },
-                          height: 50,
+                          height: context.dynamicHeight(0.1),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: context.dynamicHeight(0.01)),
                         FlatButton(
                             onPressed: () => change(),
                             child: Text(
                               _linkText,
-                              style: TextStyle(color: Colors.white, fontSize: 17),
+                              style: TextStyle(
+                                color: UniversalVeriables.greyColor,
+                                fontSize:
+                                    ResponsiveFlutter.of(context).fontSize(2),
+                              ),
                             ))
                       ],
                     ),
                   ),
                 )),
-            )
+              )
             : Center(
                 child: CircularProgressIndicator(),
               ));

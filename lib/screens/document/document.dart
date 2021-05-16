@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kbu_app/utils/universal_veriables.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
 
 class DocumentPage extends StatelessWidget {
   @override
@@ -9,52 +11,51 @@ class DocumentPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(''),
         centerTitle: true,
-        backgroundColor: UniversalVeriables.bg,
+        backgroundColor: UniversalVeriables.appBarColor,
       ),
       backgroundColor: UniversalVeriables.bg,
       body: SafeArea(
         child: Stack(
           children: <Widget>[
             SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
+              child: Center(
+                child: Expanded(
+                  child: Padding(
+                    padding: context.paddingAllLow,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: 10),
+                        SizedBox(height: context.dynamicHeight(0.001)),
                         Text(
                           'KARABÜK ÜNİVERSİTESİ ÖN LİSANS-LİSANS ULUSLARARASI ÖĞRENCİLERİN BAŞVURU, KABUL VE KAYIT YÖNERGESİ',
                           style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.blue,
+                            fontSize:
+                                ResponsiveFlutter.of(context).fontSize(2.5),
+                            color: UniversalVeriables.appBarColor,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 40),
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
+                        SizedBox(height: context.dynamicHeight(0.1)),
+                        SizedBox(
                           child: Text(
                             'Gerekli İşlem Adımları:',
                             style: TextStyle(
-                              fontSize: 22,
-                              color: Colors.grey,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(2),
+                              color: UniversalVeriables.greyColor,
                               fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        SizedBox(height: 20),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
+                        SizedBox(height: context.dynamicHeight(0.1)),
+                        SizedBox(
                           child: ListTile(
                             leading: Icon(
                               Icons.arrow_circle_down,
-                              color: Colors.grey,
-                              size: 35,
+                              color: UniversalVeriables.greyColor,
+                              size: 18,
                             ),
                             title: Text(
                               'Başvuru Koşulları' +
@@ -75,34 +76,39 @@ class DocumentPage extends StatelessWidget {
                                   "\n" +
                                   'Genel Sağlık Sigortası ',
                               style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
+                                fontSize:
+                                    ResponsiveFlutter.of(context).fontSize(2),
+                                color: UniversalVeriables.greyColor,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlign: TextAlign.left,
                             ),
                           ),
                         ),
-                        SizedBox(height: 40),
-                        Container(
-                          padding: EdgeInsets.only(left: 20),
-                          child: RaisedButton(
-                            color: Colors.grey,
-                            elevation: 10,
-                            child: Text(
-                              "Ayrıntıları Görmek için Tıklayınız",
-                              style:
-                              TextStyle(color: Colors.white, fontSize: 18),
+                        SizedBox(height: context.dynamicHeight(0.1)),
+                        SizedBox(
+                          child: Center(
+                            child: RaisedButton(
+                              color: UniversalVeriables.buttonColor,
+                              elevation: 10,
+                              child: Text(
+                                "Ayrıntıları Görmek için Tıklayınız",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: ResponsiveFlutter.of(context)
+                                      .fontSize(2.75),
+                                ),
+                              ),
+                              onPressed: () => _launchURL(),
                             ),
-                            onPressed: () => _launchURL(),
                           ),
                         ),
                       ],
                     ),
                   ),
-                ],
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),

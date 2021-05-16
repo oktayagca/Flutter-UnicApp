@@ -7,9 +7,11 @@ import 'package:kbu_app/view_model/chat_view_model.dart';
 import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/app_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../chat/chat_screen.dart';
 import '../group/newGroupPage.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
 
 class UsersPage extends StatefulWidget {
   @override
@@ -42,6 +44,7 @@ class _UsersPageState extends State<UsersPage> {
         backgroundColor: UniversalVeriables.bg,
         appBar: customAppBar(context),
         body: Column(
+          //bu kısmın kaydırılmasını istemiyoruz
           children: [
             Container(
               decoration: BoxDecoration(
@@ -52,12 +55,15 @@ class _UsersPageState extends State<UsersPage> {
                 child: ListTile(
                   title: Text(
                     getTranslated(context, "Create a Group"),
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(
+                      color: UniversalVeriables.tabColor,
+                      fontSize: ResponsiveFlutter.of(context).fontSize(2.25),
+                    ),
                   ),
                   leading: CircleAvatar(
                     child: Icon(
                       Icons.group,
-                      color: Colors.white,
+                      color: UniversalVeriables.tabColor,
                       size: 32,
                     ),
                     radius: 30,
@@ -82,25 +88,30 @@ class _UsersPageState extends State<UsersPage> {
                 child: ListTile(
                   title: Text(
                     getTranslated(context, "Unika Support"),
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(
+                      color: UniversalVeriables.tabColor,
+                      fontSize: ResponsiveFlutter.of(context).fontSize(2.25),
+                    ),
                   ),
                   leading: CircleAvatar(
                     child: Icon(
                       Icons.support_agent,
-                      color: Colors.white,
+                      color: UniversalVeriables.tabColor,
                       size: 32,
                     ),
-                      radius: 30,
-                      backgroundColor: Colors.transparent,
+                    radius: 30,
+                    backgroundColor: Colors.transparent,
                   ),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.of(context, rootNavigator: false)
                         .push(MaterialPageRoute(
-                        builder: (context) => ChangeNotifierProvider(
-                          builder: (context) => ChatViewModel(currentUser: _userModel.user,chattedUser: supportService ),
-                          child: ChatScreen(),
-                        )));
+                            builder: (context) => ChangeNotifierProvider(
+                                  builder: (context) => ChatViewModel(
+                                      currentUser: _userModel.user,
+                                      chattedUser: supportService),
+                                  child: ChatScreen(),
+                                )));
                   },
                 ),
               ),
@@ -108,18 +119,21 @@ class _UsersPageState extends State<UsersPage> {
             Container(
               decoration: BoxDecoration(
                   border:
-                  Border(bottom: BorderSide(color: Colors.grey.shade900))),
+                      Border(bottom: BorderSide(color: Colors.grey.shade900))),
               child: Theme(
                 data: ThemeData(splashColor: UniversalVeriables.blueColor),
                 child: ListTile(
                   title: Text(
                     "Rimer",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(
+                      color: UniversalVeriables.tabColor,
+                      fontSize: ResponsiveFlutter.of(context).fontSize(2.25),
+                    ),
                   ),
                   leading: CircleAvatar(
                     child: Icon(
                       Icons.business,
-                      color: Colors.white,
+                      color: UniversalVeriables.tabColor,
                       size: 32,
                     ),
                     radius: 30,
@@ -146,7 +160,7 @@ class _UsersPageState extends State<UsersPage> {
         return RefreshIndicator(
           onRefresh: _usersListUpdate,
           child: Padding(
-            padding: const EdgeInsets.only(top: 0.0),
+            padding: context.paddingAllLow,
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: allUser.length,
@@ -155,7 +169,7 @@ class _UsersPageState extends State<UsersPage> {
                     allUser[index].role != "Admin" &&
                     allUser[index].role != "Support") {
                   return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: context.paddingAllLow,
                     child: Theme(
                       data: ThemeData(
                         splashColor: UniversalVeriables.blueColor,
@@ -174,11 +188,18 @@ class _UsersPageState extends State<UsersPage> {
                         },
                         title: Text(
                           allUser[index].userName,
-                          style: TextStyle(color: Colors.white, fontSize: 18),
+                          style: TextStyle(
+                            color: UniversalVeriables.greyColor,
+                            fontSize: ResponsiveFlutter.of(context).fontSize(2),
+                          ),
                         ),
                         subtitle: Text(
                           allUser[index].email,
-                          style: TextStyle(color: Colors.grey, fontSize: 13),
+                          style: TextStyle(
+                            color: UniversalVeriables.greyColor,
+                            fontSize:
+                                ResponsiveFlutter.of(context).fontSize(1.5),
+                          ),
                         ),
                         leading: CircleAvatar(
                           backgroundColor: UniversalVeriables.bg,
@@ -210,12 +231,15 @@ class _UsersPageState extends State<UsersPage> {
                   children: [
                     Icon(
                       Icons.supervised_user_circle,
-                      color: UniversalVeriables.onlineDoctColor,
+                      color: UniversalVeriables.appBarColor,
                       size: 120,
                     ),
                     Text(
-                      getTranslated(context,"No user yet"),
-                      style: TextStyle(color: Colors.white, fontSize: 36),
+                      getTranslated(context, "No user yet"),
+                      style: TextStyle(
+                        color: UniversalVeriables.appBarColor,
+                        fontSize: ResponsiveFlutter.of(context).fontSize(5),
+                      ),
                     ),
                   ],
                 ),
@@ -253,4 +277,3 @@ class _UsersPageState extends State<UsersPage> {
     }
   }
 }
-

@@ -7,10 +7,11 @@ import 'package:kbu_app/utils/universal_veriables.dart';
 import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/social_login_button.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
 
 // ignore: must_be_immutable
 class SignInPage extends StatelessWidget {
-
   /*void _guestLogin(BuildContext context) async {
     final _userModel = Provider.of<UserViewModel>(context);
     await Firebase.initializeApp();
@@ -37,58 +38,64 @@ class SignInPage extends StatelessWidget {
               child: new Text(
             "Unicapp",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(
+              fontSize: ResponsiveFlutter.of(context).fontSize(3.5),
+            ),
           )),
           elevation: 0,
-          backgroundColor: UniversalVeriables.bg,
+          backgroundColor: UniversalVeriables.appBarColor,
         ),
         backgroundColor: UniversalVeriables.bg,
         body: Container(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                getTranslated(context, "Sign In"),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 32,
-                    color: Colors.white),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              SocialLoginButton(
-                onPressed: () => _signInGoogle(context),
-                butonIcon: Image(
-                  image: AssetImage("image/gmail.png"),
+          padding: context.paddingAllLow,
+          child: Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  getTranslated(context, "Sign In"),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: ResponsiveFlutter.of(context).fontSize(2),
+                      color: Colors.white),
                 ),
-                butonText:
-                getTranslated(context,"Sign in with Gmail and Password"), //farklı mail adresi ile olan
-                textColor: Colors.white,
-                radius: 16,
-                height: 40,
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              SocialLoginButton(
-                butonColor: UniversalVeriables.blueColor,
-                butonText: getTranslated(context, "Sign in with Email and Password"),
-                textColor: Colors.white,
-                radius: 16,
-                onPressed: () {
-                  _signInEmail(context);
-                },
-                height: 40,
-                butonIcon: Image(
-                  image: AssetImage("image/kbu.png"),
+                SizedBox(
+                  height: context.dynamicHeight(0.1),
                 ),
-              ),
-            ],
+                SocialLoginButton(
+                  butonColor: UniversalVeriables.signInColor,
+                  onPressed: () => _signInGoogle(context),
+                  butonIcon: Image(
+                    image: AssetImage("image/gmail.png"),
+                  ),
+                  butonText: getTranslated(context,
+                      "Sign in with Gmail and Password"), //farklı mail adresi ile olan
+                  textColor: Colors.white,
+                  radius: 16,
+                  height: context.dynamicHeight(0.1),
+                ),
+                SizedBox(
+                  height: context.dynamicHeight(0.02),
+                ),
+                SocialLoginButton(
+                  butonColor: UniversalVeriables.signInColor,
+                  butonText:
+                      getTranslated(context, "Sign in with Email and Password"),
+                  textColor: Colors.white,
+                  radius: 16,
+                  onPressed: () {
+                    _signInEmail(context);
+                  },
+                  height: context.dynamicHeight(0.1),
+                  butonIcon: Image(
+                    image: AssetImage("image/kbu.png"),
+                  ),
+                ),
+              ],
+            ),
           ),
         ));
   }
