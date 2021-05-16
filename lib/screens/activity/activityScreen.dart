@@ -9,6 +9,8 @@ import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/app_bar.dart';
 import 'package:kbu_app/widgets/custom-drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 
 class ActivityScreen extends StatefulWidget {
   @override
@@ -29,14 +31,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
       actions: [
         Builder(
             builder: (context) => IconButton(
-              icon: Icon(
-                Icons.menu,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer(); //popup menü
-              },
-            )),
+                  icon: Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer(); //popup menü
+                  },
+                )),
       ],
     );
   }
@@ -72,43 +74,52 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                     border: Border(
                                       bottom: BorderSide(
                                         color:
-                                        UniversalVeriables.seperatorColor,
-                                        width: 1.4,
+                                            UniversalVeriables.seperatorColor,
+                                        width: context.dynamicWidth(0.001),
                                       ),
                                     ),
                                   ),
-                                  margin: EdgeInsets.only(bottom: 20.0),
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
+                                    padding: context.paddingAllLow,
                                     child: Row(
                                       children: [
                                         SizedBox(
-                                          width: 5.0,
-                                        ),
+                                            width: context.dynamicWidth(0.02)),
                                         Expanded(
                                           child: Column(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                                MainAxisAlignment.start,
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 activity.title,
                                                 style: TextStyle(
-                                                  fontSize: 18.0,
-                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize:
+                                                      ResponsiveFlutter.of(
+                                                              context)
+                                                          .fontSize(2.5),
+                                                  color: UniversalVeriables
+                                                      .appBarColor,
                                                 ),
                                               ),
                                               SizedBox(
-                                                height: 5.0,
-                                              ),
+                                                  height: context
+                                                      .dynamicHeight(0.01)),
                                               Column(
                                                 children: [
                                                   Text(
                                                     activity.content,
                                                     style: TextStyle(
-                                                      fontSize: 14.0,
-                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          ResponsiveFlutter.of(
+                                                                  context)
+                                                              .fontSize(2),
+                                                      color: UniversalVeriables
+                                                          .greyColor,
                                                     ),
                                                   ),
                                                 ],
@@ -118,8 +129,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                                   Text(
                                                     activity.date,
                                                     style: TextStyle(
-                                                      fontSize: 14.0,
-                                                      color: Colors.white,
+                                                      fontSize:
+                                                          ResponsiveFlutter.of(
+                                                                  context)
+                                                              .fontSize(1.5),
+                                                      color: UniversalVeriables
+                                                          .greyColor,
                                                     ),
                                                   ),
                                                 ],
@@ -151,13 +166,15 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                 children: [
                                   Icon(
                                     Icons.supervised_user_circle,
-                                    color: Colors.blue,
+                                    color: UniversalVeriables.buttonColor,
                                     size: 120,
                                   ),
                                   Text(
-                                    getTranslated(context,"No Events Yet"),
+                                    getTranslated(context, "No Events Yet"),
                                     style: TextStyle(
-                                        fontSize: 36, color: Colors.white),
+                                        fontSize: ResponsiveFlutter.of(context)
+                                            .fontSize(5),
+                                        color: UniversalVeriables.greyColor),
                                   ),
                                 ],
                               ),
@@ -187,30 +204,30 @@ class _ActivityScreenState extends State<ActivityScreen> {
   }
 
   Widget addActivity(BuildContext context, String role) {
-      return SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Color(0xff00b6f3), Color(0xff0184dc)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight),
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: IconButton(
-            icon: Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 30,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CreateActivity()),
-              );
-            },
-          ),
-          padding: EdgeInsets.all(1),
+    return SingleChildScrollView(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Color(0xff0353a4), Color(0xff0353a4)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight),
+          borderRadius: BorderRadius.circular(50),
         ),
-      );
+        child: IconButton(
+          icon: Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 30,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CreateActivity()),
+            );
+          },
+        ),
+        padding: context.paddingAllLow,
+      ),
+    );
   }
 }

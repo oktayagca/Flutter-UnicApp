@@ -9,6 +9,7 @@ import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/app_bar.dart';
 import 'package:kbu_app/widgets/social_login_button.dart';
 import 'package:provider/provider.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
 
 // ignore: must_be_immutable
 class CreateNews extends StatefulWidget {
@@ -74,29 +75,31 @@ class _CreateNewsState extends State<CreateNews> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 8,
+                  height: context.dynamicHeight(0.1),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: context.paddingAllLow,
                   child: GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
                           context: context,
                           builder: (context) {
                             return Container(
-                              height: 170,
+                              height: context.dynamicHeight(0.2),
                               child: Column(
                                 children: [
                                   ListTile(
                                     leading: Icon(Icons.camera),
-                                    title: Text(getTranslated(context, "Capture From Camera")),
+                                    title: Text(getTranslated(
+                                        context, "Capture From Camera")),
                                     onTap: () {
                                       _kameradanFotoCek();
                                     },
                                   ),
                                   ListTile(
                                     leading: Icon(Icons.image),
-                                    title: Text(getTranslated(context, "Select From Gallery")),
+                                    title: Text(getTranslated(
+                                        context, "Select From Gallery")),
                                     onTap: () {
                                       _galeridenResimSec();
                                     },
@@ -111,24 +114,26 @@ class _CreateNewsState extends State<CreateNews> {
                       backgroundColor: Colors.white,
                       backgroundImage: _newsFoto == null
                           ? NetworkImage(
-                          "https://www.karabuk.edu.tr/wp-content/themes/kbu/assets/images/logo.png")
+                              "https://www.karabuk.edu.tr/wp-content/themes/kbu/assets/images/logo.png")
                           : FileImage(_newsFoto),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: context.paddingAllLow,
                   child: Form(
                     child: Column(
                       children: [
                         TextFormField(
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: UniversalVeriables.greyColor),
                           controller: newsTitleController,
                           decoration: InputDecoration(
                             hintText: getTranslated(context, "Title"),
                             labelText: getTranslated(context, "Title"),
-                            labelStyle: TextStyle(color: Colors.white),
-                            hintStyle: TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                                color: UniversalVeriables.appBarColor),
+                            hintStyle:
+                                TextStyle(color: UniversalVeriables.greyColor),
                             enabledBorder: const OutlineInputBorder(
                               // width: 0.0 produces a thin "hairline" border
                               borderSide: const BorderSide(
@@ -137,21 +142,20 @@ class _CreateNewsState extends State<CreateNews> {
                           ),
                         ),
                         SizedBox(
-                          height: 8,
-                        ),
-                        SizedBox(
-                          height: 8,
+                          height: context.dynamicHeight(0.1),
                         ),
                         TextField(
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: UniversalVeriables.greyColor),
                           controller: newsContentController,
                           maxLength: 500,
                           maxLines: 6,
                           decoration: InputDecoration(
                             hintText: getTranslated(context, "Content"),
                             labelText: getTranslated(context, "Content"),
-                            labelStyle: TextStyle(color: Colors.white),
-                            hintStyle: TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                                color: UniversalVeriables.appBarColor),
+                            hintStyle:
+                                TextStyle(color: UniversalVeriables.greyColor),
                             enabledBorder: const OutlineInputBorder(
                               // width: 0.0 produces a thin "hairline" border
                               borderSide: const BorderSide(
@@ -160,25 +164,21 @@ class _CreateNewsState extends State<CreateNews> {
                           ),
                         ),
                         SizedBox(
-                          height: 8,
-                        ),
-                        SizedBox(
-                          height: 8,
+                          height: context.dynamicHeight(0.1),
                         ),
                         SocialLoginButton(
                           butonText: getTranslated(context, "Create"),
-                          butonColor: Colors.blueAccent,
+                          butonColor: UniversalVeriables.buttonColor,
                           radius: 10,
                           butonIcon: Opacity(
                             opacity: 0,
                             child: Icon(
-
                               Icons.email,
                               size: 30,
-                              color: Colors.white,
+                              color: UniversalVeriables.greyColor,
                             ),
                           ),
-                          height: 40,
+                          height: context.dynamicHeight(0.1),
                           onPressed: () => {
                             _olustur(newsTitleController.text,
                                 newsContentController.text),

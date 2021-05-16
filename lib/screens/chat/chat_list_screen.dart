@@ -13,8 +13,10 @@ import 'package:kbu_app/widgets/app_bar.dart';
 import 'package:kbu_app/widgets/custom-drawer.dart';
 import 'package:kbu_app/widgets/new_chat_button.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'chat_screen.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
 
 class ChatListScreen extends StatefulWidget {
   @override
@@ -130,10 +132,10 @@ class _ChatListScreenState extends State {
                     print("Hata var: " + e.toString());
                   }
                   return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: context.paddingAllLow,
                     child: Theme(
                       data: ThemeData(
-                        splashColor: UniversalVeriables.blueColor,
+                        splashColor: UniversalVeriables.signInColor,
                       ),
                       child: Container(
                         decoration: BoxDecoration(
@@ -143,7 +145,7 @@ class _ChatListScreenState extends State {
                         child: Container(
                           color: theSelected
                                   .contains(allConversation[index].chatWith)
-                              ? UniversalVeriables.blueColor
+                              ? UniversalVeriables.signInColor
                               : UniversalVeriables.bg,
                           child: Dismissible(
                             background: Container(
@@ -151,12 +153,12 @@ class _ChatListScreenState extends State {
                                 Icons.delete,
                                 color: Colors.white,
                               ),
-                              color: UniversalVeriables.blueColor,
+                              color: UniversalVeriables.signInColor,
                             ),
                             key: Key(UniqueKey().toString()),
                             onDismissed: (direction) {
                               theSelected.add(allConversation[index].chatWith);
-                                deleteConversation();
+                              deleteConversation();
                             },
                             child: ListTile(
                               onLongPress: () {
@@ -212,24 +214,35 @@ class _ChatListScreenState extends State {
                               title: Text(
                                 allConversation[index].chattedUserName,
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
+                                  color: UniversalVeriables.appBarColor,
+                                  fontSize: ResponsiveFlutter.of(context)
+                                      .fontSize(2.25),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              subtitle:
-                                  (allConversation[index].lastMessage.length <
-                                          40)
-                                      ? Text(
-                                          allConversation[index].lastMessage,
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 13),
-                                        )
-                                      : Text(
-                                          allConversation[index]
-                                                  .lastMessage
-                                                  .substring(0, 39) +
-                                              "....",
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 13),
-                                        ),
+                              subtitle: (allConversation[index]
+                                          .lastMessage
+                                          .length <
+                                      40)
+                                  ? Text(
+                                      allConversation[index].lastMessage,
+                                      style: TextStyle(
+                                        color: UniversalVeriables.greyColor,
+                                        fontSize: ResponsiveFlutter.of(context)
+                                            .fontSize(1.75),
+                                      ),
+                                    )
+                                  : Text(
+                                      allConversation[index]
+                                              .lastMessage
+                                              .substring(0, 39) +
+                                          "....",
+                                      style: TextStyle(
+                                        color: UniversalVeriables.greyColor,
+                                        fontSize: ResponsiveFlutter.of(context)
+                                            .fontSize(1.75),
+                                      ),
+                                    ),
                               leading: CircleAvatar(
                                 backgroundColor: UniversalVeriables.bg,
                                 backgroundImage: NetworkImage(
@@ -248,12 +261,15 @@ class _ChatListScreenState extends State {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 10,
+                                    height: context.dynamicHeight(0.01),
                                   ),
                                   Text(
                                     _time,
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 11),
+                                      color: UniversalVeriables.greyColor,
+                                      fontSize: ResponsiveFlutter.of(context)
+                                          .fontSize(1.5),
+                                    ),
                                   )
                                 ],
                               )),
@@ -312,7 +328,7 @@ class _ChatListScreenState extends State {
     return _formattedDate;
   }
 
-  Future<void> deleteConversation() async{
+  Future<void> deleteConversation() async {
     final UserViewModel _userModel = Provider.of<UserViewModel>(context);
     List<String> deletedConversation = new List();
     String chattedUser;
@@ -324,8 +340,6 @@ class _ChatListScreenState extends State {
     setState(() {
       theSelected.clear();
     });
-
-
   }
 
   void _changeLanguage(Language language) async {

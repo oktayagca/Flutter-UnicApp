@@ -8,6 +8,8 @@ import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/platform_alert_dialog.dart';
 import 'package:kbu_app/widgets/social_login_button.dart';
 import 'package:provider/provider.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 
 import 'profile_photo.dart';
 
@@ -17,7 +19,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   File _profilePhoto;
   final picker = ImagePicker();
   TextEditingController _controllerUserName;
@@ -70,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: UniversalVeriables.bg,
       appBar: AppBar(
         title: Text(getTranslated(context, "Profile")),
-        backgroundColor: UniversalVeriables.bg,
+        backgroundColor: UniversalVeriables.appBarColor,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -78,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: context.paddingAllLow,
                 child: GestureDetector(
                   onTap: () {
                     showImage(_userModel.user.profileURL);
@@ -97,14 +98,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: IconButton(
                   icon: Icon(
                     Icons.camera_alt,
-                    color: Colors.white,
+                    color: UniversalVeriables.greyColor,
                   ),
                   focusColor: UniversalVeriables.blueColor,
                   highlightColor: UniversalVeriables.blueColor,
                   hoverColor: UniversalVeriables.blueColor,
                   splashColor: UniversalVeriables.blueColor,
                   disabledColor: UniversalVeriables.blueColor,
-                  color: Colors.white,
+                  color: UniversalVeriables.greyColor,
                   iconSize: 30,
                   onPressed: () {
                     showModalBottomSheet(
@@ -112,17 +113,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         builder: (context) {
                           return Container(
                             color: UniversalVeriables.bg,
-                            height: 150,
+                            height: context.dynamicHeight(0.1),
                             child: Column(
                               children: [
                                 ListTile(
                                   leading: Icon(
                                     Icons.camera_alt,
-                                    color: Colors.white,
+                                    color: UniversalVeriables.greyColor,
                                   ),
                                   title: Text(
-                                    getTranslated(context, "Capture From Camera"),
-                                    style: TextStyle(color: Colors.white),
+                                    getTranslated(
+                                        context, "Capture From Camera"),
+                                    style: TextStyle(
+                                        color: UniversalVeriables.greyColor),
                                   ),
                                   onTap: () {
                                     _takePhoto();
@@ -131,10 +134,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ListTile(
                                   leading: Icon(
                                     Icons.image,
-                                    color: Colors.white,
+                                    color: UniversalVeriables.greyColor,
                                   ),
-                                  title: Text(getTranslated(context, "Select From Gallery"),
-                                      style: TextStyle(color: Colors.white)),
+                                  title: Text(
+                                      getTranslated(
+                                          context, "Select From Gallery"),
+                                      style: TextStyle(
+                                          color: UniversalVeriables.greyColor)),
                                   onTap: () {
                                     chooseGallery();
                                   },
@@ -147,12 +153,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: context.dynamicHeight(0.01),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: context.paddingAllLow,
                 child: TextFormField(
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: UniversalVeriables.greyColor),
                   initialValue: _userModel.user.email,
                   readOnly: true,
                   decoration: InputDecoration(
@@ -161,14 +167,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.black,
                       ),
                     ),
-                    prefixIcon: Icon(Icons.mail, color: Colors.white),
+                    prefixIcon:
+                        Icon(Icons.mail, color: UniversalVeriables.greyColor),
                     hintText: getTranslated(context, "E-Mail"),
                     hintStyle: TextStyle(
-                      color: Colors.white,
+                      color: UniversalVeriables.greyColor,
+                      fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
                     ),
                     labelText: getTranslated(context, "E-Mail"),
                     labelStyle: TextStyle(
-                      color: Colors.white,
+                      color: UniversalVeriables.appBarColor,
+                      fontSize: ResponsiveFlutter.of(context).fontSize(2.5),
+                      fontWeight: FontWeight.bold,
                     ),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
@@ -179,10 +189,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: context.paddingAllLow,
                 child: TextFormField(
                   controller: _controllerUserName,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: UniversalVeriables.greyColor),
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
@@ -191,15 +201,20 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     prefixIcon: Opacity(
                         opacity: 1,
-                        child: Icon(Icons.person, color: Colors.white)),
-                    suffixIcon: Icon(Icons.edit, color: Colors.white),
+                        child: Icon(Icons.person,
+                            color: UniversalVeriables.greyColor)),
+                    suffixIcon:
+                        Icon(Icons.edit, color: UniversalVeriables.greyColor),
                     hintText: getTranslated(context, "User Name"),
                     hintStyle: TextStyle(
-                      color: Colors.white,
+                      color: UniversalVeriables.greyColor,
+                      fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
                     ),
                     labelText: getTranslated(context, "User Name"),
                     labelStyle: TextStyle(
-                      color: Colors.white,
+                      color: UniversalVeriables.appBarColor,
+                      fontSize: ResponsiveFlutter.of(context).fontSize(2.5),
+                      fontWeight: FontWeight.bold,
                     ),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
@@ -210,18 +225,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: context.dynamicHeight(0.01),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 150),
+                padding: context.paddingAllLow,
                 child: SocialLoginButton(
                   butonText: getTranslated(context, "Save"),
-                  butonColor: UniversalVeriables.blueColor,
+                  butonColor: UniversalVeriables.buttonColor,
                   onPressed: () {
                     _userNameUpdate(context);
                     _profilePhotoUpdate(context);
                   },
-                  height: 35,
+                  height: context.dynamicHeight(0.1),
                 ),
               )
             ],
@@ -246,8 +261,8 @@ class _ProfilePageState extends State<ProfilePage> {
         _controllerUserName.text = _userModel.user.userName;
         PlatformAlertDialog(
           title: getTranslated(context, "Error"),
-          content:
-              getTranslated(context, "Username is taken, please try another username"),
+          content: getTranslated(
+              context, "Username is taken, please try another username"),
           mainAction: getTranslated(context, "Ok"),
         ).show(context);
       }
@@ -261,7 +276,7 @@ class _ProfilePageState extends State<ProfilePage> {
           _userModel.user.userID, "profil_foto", _profilePhoto);
       _userModel.user.profileURL = url;
       print("gelen url" + url);
-      if(url !=null){
+      if (url != null) {
         PlatformAlertDialog(
           title: getTranslated(context, "Successful"),
           content: getTranslated(context, "Profile Picture Changed"),

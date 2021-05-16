@@ -17,101 +17,106 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     UserViewModel _userModel = Provider.of<UserViewModel>(context);
     return Drawer(
-      child: Container(
-        color: UniversalVeriables.bg,
-        child: ListView(
-          children: [
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(
-                    fullscreenDialog: false,
-                    builder: (context) => ProfilePage()));
-              },
-              child: DrawerHeader(
-                decoration: BoxDecoration(),
-                child: Container(
-                  child: Column(
-                    children: [
-                      Material(
-                        borderRadius: BorderRadius.all(Radius.circular(65.0)),
-                        child: CircleAvatar(
-                          radius: 65,
-                          backgroundColor: UniversalVeriables.blueColor,
-                          backgroundImage:
-                              NetworkImage(_userModel.user.profileURL),
-                        ),
-                      )
-                    ],
+      child: Expanded(
+        child: Container(
+          color: UniversalVeriables.customDrawerColor,
+          child: ListView(
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      fullscreenDialog: false,
+                      builder: (context) => ProfilePage()));
+                },
+                child: DrawerHeader(
+                  decoration: BoxDecoration(),
+                  child: FittedBox(
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Material(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(65.0)),
+                            child: CircleAvatar(
+                              radius: 65,
+                              backgroundColor: UniversalVeriables.blueColor,
+                              backgroundImage:
+                                  NetworkImage(_userModel.user.profileURL),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            CustomListTile(
-                Icons.person,
-                getTranslated(context,"Profile"),
-                () => {
-                      Navigator.of(context).pop(),
-                      Navigator.of(context).push(MaterialPageRoute(
-                          fullscreenDialog: false,
-                          builder: (context) => ProfilePage()))
-                    }),
-            CustomListTile(
-                Icons.phone,
-                getTranslated(context,"Communication"),
-                () => {
-                      Navigator.of(context).pop(),
-                      Navigator.of(context).push(MaterialPageRoute(
-                          fullscreenDialog: false,
-                          builder: (context) => CommunicationPage()))
-                    }),
-            CustomListTile(
-                Icons.navigation,
-                getTranslated(context,"How can I go ?"),
-                () => {
-                      Navigator.of(context).pop(),
-                      Navigator.of(context).push(MaterialPageRoute(
-                          fullscreenDialog: false,
-                          builder: (context) => TransportationPage()))
-                    }),
-            CustomListTile(
-                Icons.directions_walk,
-                getTranslated(context,"Places to visit"),
-                () => {
-                      Navigator.of(context).pop(),
-                      Navigator.of(context).push(MaterialPageRoute(
-                          fullscreenDialog: false,
-                          builder: (context) => VisitPage()))
-                    }),
-            CustomListTile(
-                Icons.business,
-                getTranslated(context, "Documents"),
-                    () => {
-                  Navigator.of(context).pop(),
-                  Navigator.of(context).push(MaterialPageRoute(
-                      fullscreenDialog: false,
-                      builder: (context) => DocumentPage()))
-                }),
-            _userModel.user.role.contains("Admin")
-                ? CustomListTile(
-                    Icons.admin_panel_settings,
-                    getTranslated(context,"Admin Operations"),
-                    () => {
-                          Navigator.of(context).pop(),
-                          Navigator.of(context).push(MaterialPageRoute(
-                              fullscreenDialog: false,
-                              builder: (context) => AdminSettingsPage()))
-                        })
-                : Container(),
-            CustomListTile(
-                Icons.settings,
-                getTranslated(context,"Settings"),
-                () => {
-                      Navigator.of(context).pop(),
-                    }),
-            CustomListTile(Icons.lock, getTranslated(context, "Sign out"),
-                () => {_signOutPermission(context)}),
-          ],
+              CustomListTile(
+                  Icons.person,
+                  getTranslated(context, "Profile"),
+                  () => {
+                        Navigator.of(context).pop(),
+                        Navigator.of(context).push(MaterialPageRoute(
+                            fullscreenDialog: false,
+                            builder: (context) => ProfilePage()))
+                      }),
+              CustomListTile(
+                  Icons.phone,
+                  getTranslated(context, "Communication"),
+                  () => {
+                        Navigator.of(context).pop(),
+                        Navigator.of(context).push(MaterialPageRoute(
+                            fullscreenDialog: false,
+                            builder: (context) => CommunicationPage()))
+                      }),
+              CustomListTile(
+                  Icons.navigation,
+                  getTranslated(context, "How can I go ?"),
+                  () => {
+                        Navigator.of(context).pop(),
+                        Navigator.of(context).push(MaterialPageRoute(
+                            fullscreenDialog: false,
+                            builder: (context) => TransportationPage()))
+                      }),
+              CustomListTile(
+                  Icons.directions_walk,
+                  getTranslated(context, "Places to visit"),
+                  () => {
+                        Navigator.of(context).pop(),
+                        Navigator.of(context).push(MaterialPageRoute(
+                            fullscreenDialog: false,
+                            builder: (context) => VisitPage()))
+                      }),
+              CustomListTile(
+                  Icons.business,
+                  getTranslated(context, "Documents"),
+                  () => {
+                        Navigator.of(context).pop(),
+                        Navigator.of(context).push(MaterialPageRoute(
+                            fullscreenDialog: false,
+                            builder: (context) => DocumentPage()))
+                      }),
+              _userModel.user.role.contains("Admin")
+                  ? CustomListTile(
+                      Icons.admin_panel_settings,
+                      getTranslated(context, "Admin Operations"),
+                      () => {
+                            Navigator.of(context).pop(),
+                            Navigator.of(context).push(MaterialPageRoute(
+                                fullscreenDialog: false,
+                                builder: (context) => AdminSettingsPage()))
+                          })
+                  : Container(),
+              CustomListTile(
+                  Icons.settings,
+                  getTranslated(context, "Settings"),
+                  () => {
+                        Navigator.of(context).pop(),
+                      }),
+              CustomListTile(Icons.lock, getTranslated(context, "Sign out"),
+                  () => {_signOutPermission(context)}),
+            ],
+          ),
         ),
       ),
     );

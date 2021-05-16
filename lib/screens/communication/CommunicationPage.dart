@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kbu_app/localization/localization_constants.dart';
 import 'package:kbu_app/utils/universal_veriables.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
 
 class CommunicationPage extends StatelessWidget {
   @override
@@ -9,71 +11,111 @@ class CommunicationPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: UniversalVeriables.bg,
       appBar: AppBar(
-        title: Text(getTranslated(context,"Communication")),
-        backgroundColor: UniversalVeriables.bg,
+        title: Text(getTranslated(context, "Communication")),
+        backgroundColor: UniversalVeriables.appBarColor,
         centerTitle: true,
       ),
       body: Center(
-        child: ListView.builder(
-            itemCount: 1,
-            itemBuilder: (context, index) {
-              return Card(color: UniversalVeriables.bg,
-                child: Column(
-                  children: [
-                    Image(
-                      image: AssetImage("image/konum1.png"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: ListTile(
-                        leading: Icon(
-                          Icons.home,
-                          color: Colors.blue,
-                          size: 35,
-                        ),
-                        title: Text(
-                          getTranslated(context, "Address:"),
-                          style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
-                        ),
-                        subtitle: Text(
-                            'Karabük Üniversitesi, Kastamonu Yolu Demir Çelik Kampüsü, 78050          Merkez/Karabük',style: TextStyle(color: Colors.white),),
+        child: Expanded(
+          child: ListView.builder(
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return Card(
+                  color: UniversalVeriables.bg,
+                  child: Column(
+                    children: [
+                      Image(
+                        image: AssetImage("image/konum1.png"),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: ListTile(
-                        leading: Icon(
-                          Icons.phone_callback,
-                          color: Colors.blue,
-                          size: 35,
+                      SizedBox(
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.home,
+                            color: UniversalVeriables.buttonColor,
+                            size: 35,
+                          ),
+                          title: Text(
+                            getTranslated(context, "Address:"),
+                            style: TextStyle(
+                                fontSize:
+                                    ResponsiveFlutter.of(context).fontSize(2.5),
+                                fontWeight: FontWeight.bold,
+                                color: UniversalVeriables.appBarColor),
+                          ),
+                          subtitle: Text(
+                            'Karabük Üniversitesi, Kastamonu Yolu Demir Çelik Kampüsü, 78050  Merkez/Karabük',
+                            style: TextStyle(
+                              color: UniversalVeriables.greyColor,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(2),
+                            ),
+                          ),
                         ),
-                        title: Text(
-                          getTranslated(context, "Communication"),
-                          style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
-                        ),
-                        subtitle: Text('444 0 478',style: TextStyle(color: Colors.white),),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: ListTile(
-                        leading: Icon(
-                          Icons.web,
-                          color: Colors.blue,
-                          size: 35,
-                        ),
-                        onTap: () => _launchURL(),
-                        title: Text(
-                          'Web',
-                          style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
-                        ),
-                        subtitle: Text('www.karabuk.edu.tr',style: TextStyle(color: Colors.white),),
+                      SizedBox(
+                        height: context.dynamicHeight(0.1),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+                      SizedBox(
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.phone_callback,
+                            color: UniversalVeriables.buttonColor,
+                            size: 35,
+                          ),
+                          title: Text(
+                            getTranslated(context, "Communication"),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: UniversalVeriables.appBarColor,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(2.5),
+                            ),
+                          ),
+                          subtitle: Text(
+                            '444 0 478',
+                            style: TextStyle(
+                              color: UniversalVeriables.greyColor,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(2),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: context.dynamicHeight(0.1),
+                      ),
+                      SizedBox(
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.web,
+                            color: UniversalVeriables.buttonColor,
+                            size: 35,
+                          ),
+                          onTap: () => _launchURL(),
+                          title: Text(
+                            'Web',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: UniversalVeriables.appBarColor,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(2.5),
+                            ),
+                          ),
+                          subtitle: Text(
+                            'www.karabuk.edu.tr',
+                            style: TextStyle(
+                              color: UniversalVeriables.greyColor,
+                              fontSize:
+                                  ResponsiveFlutter.of(context).fontSize(2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+        ),
       ),
     );
   }

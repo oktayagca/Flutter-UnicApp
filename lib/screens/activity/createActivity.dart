@@ -6,6 +6,7 @@ import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/app_bar.dart';
 import 'package:kbu_app/widgets/social_login_button.dart';
 import 'package:provider/provider.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
 
 // ignore: must_be_immutable
 class CreateActivity extends StatefulWidget {
@@ -20,7 +21,7 @@ class _CreateActivityState extends State<CreateActivity> {
 
   Activity _activity;
 
-  void _create(String title, String content,String date) async {
+  void _create(String title, String content, String date) async {
     final _userModel = Provider.of<UserViewModel>(context);
     _activity = Activity(
       title: title,
@@ -29,7 +30,6 @@ class _CreateActivityState extends State<CreateActivity> {
     );
     _userModel.createActivity(_activity);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -41,21 +41,21 @@ class _CreateActivityState extends State<CreateActivity> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: context.paddingAllLow,
                   child: Form(
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 70,
-                        ),
+                        SizedBox(height: context.dynamicHeight(0.02)),
                         TextFormField(
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: UniversalVeriables.greyColor),
                           controller: newsTitleController,
                           decoration: InputDecoration(
                             hintText: getTranslated(context, "Title"),
                             labelText: getTranslated(context, "Title"),
-                            labelStyle: TextStyle(color: Colors.white),
-                            hintStyle: TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                                color: UniversalVeriables.appBarColor),
+                            hintStyle:
+                                TextStyle(color: UniversalVeriables.greyColor),
                             enabledBorder: const OutlineInputBorder(
                               // width: 0.0 produces a thin "hairline" border
                               borderSide: const BorderSide(
@@ -64,20 +64,19 @@ class _CreateActivityState extends State<CreateActivity> {
                           ),
                         ),
                         SizedBox(
-                          height: 8,
-                        ),
-                        SizedBox(
-                          height: 8,
+                          height: context.dynamicHeight(0.1),
                         ),
                         TextField(
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: UniversalVeriables.greyColor),
                           controller: newsContentController,
                           maxLines: 6,
                           decoration: InputDecoration(
                             hintText: getTranslated(context, "Content"),
                             labelText: getTranslated(context, "Content"),
-                            labelStyle: TextStyle(color: Colors.white),
-                            hintStyle: TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                                color: UniversalVeriables.appBarColor),
+                            hintStyle:
+                                TextStyle(color: UniversalVeriables.greyColor),
                             enabledBorder: const OutlineInputBorder(
                               // width: 0.0 produces a thin "hairline" border
                               borderSide: const BorderSide(
@@ -86,57 +85,55 @@ class _CreateActivityState extends State<CreateActivity> {
                           ),
                         ),
                         SizedBox(
-                          height: 8,
-                        ),
-                        SizedBox(
-                          height: 8,
+                          height: context.dynamicHeight(0.1),
                         ),
                         TextFormField(
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: UniversalVeriables.greyColor),
                           controller: newsDateController,
                           decoration: InputDecoration(
                             hintText: getTranslated(context, "Date"),
                             labelText: getTranslated(context, "Date"),
-                            labelStyle: TextStyle(color: Colors.white),
-                            hintStyle: TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                                color: UniversalVeriables.appBarColor),
+                            hintStyle:
+                                TextStyle(color: UniversalVeriables.greyColor),
                             enabledBorder: const OutlineInputBorder(
                               // width: 0.0 produces a thin "hairline" border
                               borderSide: const BorderSide(
                                   color: Colors.grey, width: 0.0),
                             ),
                           ),
-                          onTap: () async{
+                          onTap: () async {
                             FocusScope.of(context).requestFocus(FocusNode());
                             await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(DateTime.now().year),
-                                lastDate: DateTime(DateTime.now().year + 20),);
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(DateTime.now().year),
+                              lastDate: DateTime(DateTime.now().year + 20),
+                            );
                           },
                         ),
                         SizedBox(
-                          height: 8,
-                        ),
-                        SizedBox(
-                          height: 8,
+                          height: context.dynamicHeight(0.1),
                         ),
                         SocialLoginButton(
                           butonText: getTranslated(context, "Create"),
-                          butonColor: Colors.blueAccent,
+                          butonColor: UniversalVeriables.buttonColor,
                           radius: 10,
                           butonIcon: Opacity(
                             opacity: 0,
                             child: Icon(
-
                               Icons.email,
                               size: 30,
                               color: Colors.white,
                             ),
                           ),
-                          height: 40,
+                          height: context.dynamicHeight(0.1),
                           onPressed: () => {
-                            _create(newsTitleController.text,
-                                newsContentController.text,newsDateController.text),
+                            _create(
+                                newsTitleController.text,
+                                newsContentController.text,
+                                newsDateController.text),
                             Navigator.pop(context),
                           },
                         ),

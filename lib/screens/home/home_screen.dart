@@ -5,9 +5,11 @@ import 'package:kbu_app/localization/localization_constants.dart';
 import 'package:kbu_app/notification_handler.dart';
 import 'package:kbu_app/screens/activity/activityScreen.dart';
 import 'package:kbu_app/utils/universal_veriables.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import '../news/newsScreen.dart';
 import '../chat/chat_list_screen.dart';
 import '../status/status_screen.dart';
+import 'package:kbu_app/widgets/context_extension.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,10 +19,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   PageController pageController;
   int _page = 0;
-
 
   @override
   void initState() {
@@ -43,15 +43,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-       onWillPop: () async {
-          if(_page==0){
-            SystemNavigator.pop();
-            return false;
-          }else{
-            onPageChanged(0);
-            navigationTapped(0);
-            return false;
-          }
+      onWillPop: () async {
+        if (_page == 0) {
+          SystemNavigator.pop();
+          return false;
+        } else {
+          onPageChanged(0);
+          navigationTapped(0);
+          return false;
+        }
       },
       child: Scaffold(
         backgroundColor: UniversalVeriables.bg,
@@ -69,14 +69,13 @@ class _HomeScreenState extends State<HomeScreen> {
             Center(
               child: StatusScreen(),
             ),
-
           ],
           controller: pageController,
           onPageChanged: onPageChanged,
         ),
         bottomNavigationBar: Container(
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: context.paddingAllLow,
             child: CupertinoTabBar(
               backgroundColor: UniversalVeriables.bg,
               items: [
@@ -84,67 +83,66 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: Icon(Icons.chat,
                         // ignore: unrelated_type_equality_checks
                         color: (_page == 0)
-                            ? UniversalVeriables.lightBlueColor
+                            ? UniversalVeriables.tabColor
                             : UniversalVeriables.greyColor),
                     // ignore: deprecated_member_use
                     title: Text(
                       getTranslated(context, "Chat"),
                       style: TextStyle(
-                          fontSize: 10,
+                          fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
                           // ignore: unrelated_type_equality_checks
                           color: (_page == 0)
-                              ? UniversalVeriables.lightBlueColor
+                              ? UniversalVeriables.tabColor
                               : UniversalVeriables.greyColor),
                     )),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.notifications,
                         // ignore: unrelated_type_equality_checks
                         color: (_page == 1)
-                            ? UniversalVeriables.lightBlueColor
+                            ? UniversalVeriables.tabColor
                             : UniversalVeriables.greyColor),
                     // ignore: deprecated_member_use
                     title: Text(
                       getTranslated(context, "News"),
                       style: TextStyle(
-                          fontSize: 10,
+                          fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
                           // ignore: unrelated_type_equality_checks
                           color: (_page == 1)
-                              ? UniversalVeriables.lightBlueColor
+                              ? UniversalVeriables.tabColor
                               : UniversalVeriables.greyColor),
                     )),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.local_activity_outlined,
                         // ignore: unrelated_type_equality_checks
                         color: (_page == 2)
-                            ? UniversalVeriables.lightBlueColor
+                            ? UniversalVeriables.tabColor
                             : UniversalVeriables.greyColor),
                     // ignore: deprecated_member_use
                     title: Text(
                       getTranslated(context, "Activities"),
                       style: TextStyle(
-                          fontSize: 10,
+                          fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
                           // ignore: unrelated_type_equality_checks
                           color: (_page == 2)
-                              ? UniversalVeriables.lightBlueColor
+                              ? UniversalVeriables.tabColor
                               : UniversalVeriables.greyColor),
                     )),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.announcement,
                         // ignore: unrelated_type_equality_checks
                         color: (_page == 3)
-                            ? UniversalVeriables.lightBlueColor
+                            ? UniversalVeriables.tabColor
                             : UniversalVeriables.greyColor),
                     // ignore: deprecated_member_use
                     title: Text(
                       getTranslated(context, "Announcements"),
                       style: TextStyle(
-                          fontSize: 10,
+                          fontSize: ResponsiveFlutter.of(context).fontSize(1.5),
                           // ignore: unrelated_type_equality_checks
                           color: (_page == 3)
-                              ? UniversalVeriables.lightBlueColor
+                              ? UniversalVeriables.tabColor
                               : UniversalVeriables.greyColor),
                     )),
-
               ],
               onTap: navigationTapped,
               currentIndex: _page,
