@@ -209,7 +209,9 @@ class UserRepository implements AuthBase {
       }
     }
   }
-  Future<bool> saveGroupMessage(Message saveMessage, UserModel currentUser) async {
+
+  Future<bool> saveGroupMessage(
+      Message saveMessage, UserModel currentUser) async {
     if (appMode == AppMode.DEBUG) {
       var result = await _fireStoreDbService.saveGroupMessage(saveMessage);
       if (result) {
@@ -345,13 +347,13 @@ class UserRepository implements AuthBase {
     }
   }
 
-  Future<bool> createActivity(Activity activity) async{
+  Future<bool> createActivity(Activity activity) async {
     var sonuc = await _fireStoreDbService.createActivity(activity);
     print("CreatedNews:");
     return sonuc;
   }
 
-  Future<List<Activity>> getAllActivity() async{
+  Future<List<Activity>> getAllActivity() async {
     if (appMode == AppMode.DEBUG) {
       var tumHaberlerListesi = await _fireStoreDbService.getAllActivity();
       return tumHaberlerListesi;
@@ -361,18 +363,19 @@ class UserRepository implements AuthBase {
     }
   }
 
-  Future<String> uploadGroupFile(
-      String documentID, String fileType, File haberFoto, String description) async {
+  Future<String> uploadGroupFile(String documentID, String fileType,
+      File haberFoto, String description) async {
     if (appMode == AppMode.DEBUG) {
       var groupImgUrl = await _firebaseStorageService.uploadGroupFile(
-          documentID, fileType, haberFoto,description);
+          documentID, fileType, haberFoto, description);
       return groupImgUrl;
     } else {
       var groupImgUrl = await _firebaseStorageService.uploadGroupFile(
-          documentID, fileType, haberFoto,description);
+          documentID, fileType, haberFoto, description);
       return groupImgUrl;
     }
   }
+
   Future<bool> createGroup(Group group) async {
     var result = await _fireStoreDbService.createGroup(group);
     return result;
