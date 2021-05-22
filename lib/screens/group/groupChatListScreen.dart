@@ -193,6 +193,7 @@ class _GroupChatListScreenState extends State {
                                             ChangeNotifierProvider(
                                               builder: (context) => GroupChatViewModel(
                                                   currentUser: _userModel.user,
+                                                  group: allConversation[index],
                                                   chattedUser:
                                                       UserModel.idAndImage(
                                                           userID:

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kbu_app/model/Story.dart';
 import 'package:kbu_app/model/activity.dart';
 import 'package:kbu_app/model/group.dart';
@@ -87,8 +88,8 @@ class FireStoreDbService implements DbBase {
   Stream<List<GroupSpeech>> getAllGroupConversation(String userID) {
     var snapShot = FirebaseFirestore.instance
         .collection("groups")
-        .where("members", arrayContains: userID).
-        orderBy("createDate", descending: true)
+        .where("members", arrayContains: userID)
+        .orderBy("createDate", descending: true)
         .snapshots();
     return snapShot.map((conversationList) => conversationList.docs
         .map((conversation) => GroupSpeech.fromMap(conversation.data()))
@@ -124,7 +125,6 @@ class FireStoreDbService implements DbBase {
         .map((message) => Message.fromMap(message.data()))
         .toList());
   }
-
 
   @override
   Future<bool> saveMessage(Message saveMessage) async {
@@ -187,6 +187,7 @@ class FireStoreDbService implements DbBase {
     });
     return true;
   }
+
   Future<List<Message>> getMessageWithPagination(String currentUserID,
       String chattedUserID, Message lastMessage, int total) async {
     QuerySnapshot _querySnapshot;
@@ -348,9 +349,6 @@ class FireStoreDbService implements DbBase {
         .doc(_myDocumentID)
         .set(saveGroupToMap);
 
-
-
     return true;
   }
-
 }
