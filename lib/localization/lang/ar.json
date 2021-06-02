@@ -63,6 +63,11 @@
   "Documents": "Documents",
   "More Information": "More Information",
   "Groups": "Groups",
-  "Language": "Language"
+  "Language": "Language",
+  "Exit Group": "Exit Group",
+  "Add Participant": "Add Participant",
+  "You left the group": "You left the group",
+  "You are about to leave the group": "You are about to leave the group",
+  "No": "No"
  
 }

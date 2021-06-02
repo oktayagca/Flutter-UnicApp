@@ -56,10 +56,17 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             ),
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => GroupDetailPage()),
-            );
+            Navigator.of(context, rootNavigator: false)
+                .push(MaterialPageRoute(
+                builder: (context) =>
+                    ChangeNotifierProvider(
+                      builder: (context) => GroupChatViewModel(
+                          group:_chatModel.group ,
+                          currentUser: _chatModel.currentUser,
+                          chattedUser:_chatModel.chattedUser
+                      ),
+                      child: GroupDetailPage(),
+                    )));
           },
           style: ButtonStyle(
               backgroundColor:

@@ -78,6 +78,7 @@ flutter:
     - image/seker.png
     - image/kbu.png
     - image/gmail.png
+    - image/logobizim.png
     - lib/localization/lang/en.json
     - lib/localization/lang/tr.json
     - lib/localization/lang/ar.json

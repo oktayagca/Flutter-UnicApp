@@ -288,6 +288,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void showImage(String profilePhoto) {
     Navigator.of(context).push(MaterialPageRoute(
-        fullscreenDialog: true, builder: (context) => ProfilePhoto()));
+        fullscreenDialog: true, builder: (context) => ProfilePhoto(profilePhoto)));
   }
 }

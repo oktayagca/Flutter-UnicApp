@@ -33,13 +33,13 @@ class _VisitPage extends State<VisitPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      height: context.dynamicHeight(1),
+                      height: context.dynamicHeight(1.5),
                       width: context.dynamicWidth(2),
                       padding: context.paddingAllLow,
                       child: Swiper(
                         itemCount: visits.length,
-                        itemHeight: MediaQuery.of(context).size.width - 1 * 64,
-                        itemWidth: MediaQuery.of(context).size.width - 1 * 64,
+                        itemHeight: MediaQuery.of(context).size.height - 1 * 35,
+                        itemWidth: MediaQuery.of(context).size.width - 1 * 28,
                         layout: SwiperLayout.STACK,
                         pagination: SwiperPagination(
                           builder: DotSwiperPaginationBuilder(),
@@ -61,34 +61,34 @@ class _VisitPage extends State<VisitPage> {
                                 Column(
                                   children: <Widget>[
                                     SizedBox(
-                                      height: context.dynamicHeight(0.1),
+                                      height: context.dynamicHeight(0.6),
                                     ),
                                     Expanded(
                                       child: Card(
                                         elevation: 15,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(32),
+                                          BorderRadius.circular(32),
                                         ),
                                         color: Colors.white,
                                         child: Padding(
                                           padding: context.paddingAllLow,
                                           child: Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: <Widget>[
                                               SizedBox(
                                                 height:
-                                                    context.dynamicHeight(0.1),
+                                                context.dynamicHeight(0.2),
                                               ),
                                               Text(
                                                 visits[index].name,
                                                 style: TextStyle(
                                                   fontFamily: 'Avenir',
                                                   fontSize:
-                                                      ResponsiveFlutter.of(
-                                                              context)
-                                                          .fontSize(2.25),
+                                                  ResponsiveFlutter.of(
+                                                      context)
+                                                      .fontSize(2.25),
                                                   color: Colors.red,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -96,16 +96,16 @@ class _VisitPage extends State<VisitPage> {
                                               ),
                                               SizedBox(
                                                 height:
-                                                    context.dynamicHeight(0.1),
+                                                context.dynamicHeight(0.1),
                                               ),
                                               Text(
                                                 'KARABÜK',
                                                 style: TextStyle(
                                                   fontFamily: 'Avenir',
                                                   fontSize:
-                                                      ResponsiveFlutter.of(
-                                                              context)
-                                                          .fontSize(2.25),
+                                                  ResponsiveFlutter.of(
+                                                      context)
+                                                      .fontSize(2.25),
                                                   color: UniversalVeriables
                                                       .appBarColor,
                                                   fontWeight: FontWeight.bold,
@@ -114,7 +114,7 @@ class _VisitPage extends State<VisitPage> {
                                               ),
                                               SizedBox(
                                                 height:
-                                                    context.dynamicHeight(0.1),
+                                                context.dynamicHeight(0.1),
                                               ),
                                               Container(
                                                 child: GFRating(
@@ -130,7 +130,7 @@ class _VisitPage extends State<VisitPage> {
                                               ),
                                               SizedBox(
                                                 height:
-                                                    context.dynamicHeight(0.1),
+                                                context.dynamicHeight(0.1),
                                               ),
                                               Row(
                                                 children: <Widget>[
@@ -139,13 +139,13 @@ class _VisitPage extends State<VisitPage> {
                                                     style: TextStyle(
                                                       fontFamily: 'Avenir',
                                                       fontSize:
-                                                          ResponsiveFlutter.of(
-                                                                  context)
-                                                              .fontSize(2),
+                                                      ResponsiveFlutter.of(
+                                                          context)
+                                                          .fontSize(2),
                                                       color: UniversalVeriables
                                                           .greyColor,
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                      FontWeight.bold,
                                                     ),
                                                     textAlign: TextAlign.left,
                                                   ),
@@ -163,10 +163,19 @@ class _VisitPage extends State<VisitPage> {
                                     ),
                                   ],
                                 ),
-                                Image.asset(
-                                  visits[index].iconImage,
-                                  height: context.dynamicHeight(1),
-                                  width: context.dynamicWidth(1),
+
+                                // decoration: BoxDecoration(
+                                //   borderRadius: BorderRadius.circular(150),
+                                // ),
+                                Padding(
+                                  padding: context.paddingAllLow,
+                                  child: Container(
+                                    child: Image.asset(
+                                      visits[index].iconImage,
+                                      height: context.dynamicHeight(1),
+                                      width: context.dynamicWidth(1),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),

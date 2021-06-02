@@ -9,6 +9,7 @@ import 'package:kbu_app/screens/group/groupChatScreen.dart';
 import 'package:kbu_app/utils/universal_veriables.dart';
 import 'package:kbu_app/view_model/groupChat_view_model.dart';
 import 'package:kbu_app/view_model/user_viewModel.dart';
+import 'package:kbu_app/widgets/app_bar.dart';
 import 'package:kbu_app/widgets/social_login_button.dart';
 import 'package:provider/provider.dart';
 
@@ -83,6 +84,11 @@ class _CreateGroupState extends State<CreateGroup> {
     });
   }
 
+  CustomAppBar customAppBar(BuildContext context) {
+    return CustomAppBar(
+      title: Text(getTranslated(context, "Create a Group")),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final _userModel = Provider.of<UserViewModel>(context);
@@ -90,10 +96,7 @@ class _CreateGroupState extends State<CreateGroup> {
 
     return Scaffold(
       backgroundColor: UniversalVeriables.bg,
-      appBar: AppBar(
-        title: Text(getTranslated(context, "Create a Group")),
-        backgroundColor: UniversalVeriables.bg,
-      ),
+      appBar: customAppBar(context),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

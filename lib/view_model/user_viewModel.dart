@@ -240,4 +240,15 @@ class UserViewModel with ChangeNotifier implements AuthBase {
     var result = await _userRepository.createGroup(group);
     return result;
   }
+
+  Future<String>updateGroupPhoto(String documentID, String fileType, File haberFoto, String description) async{
+    var groupImgUrl =
+    await _userRepository.updateGroupPhoto(documentID, fileType, haberFoto,description);
+    return groupImgUrl;
+  }
+
+  Future<void>updateMembers(List<dynamic> members,String groupID) async{
+    await _userRepository.updateMembers(members,groupID);
+  }
+
 }

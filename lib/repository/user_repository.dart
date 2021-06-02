@@ -380,4 +380,27 @@ class UserRepository implements AuthBase {
     var result = await _fireStoreDbService.createGroup(group);
     return result;
   }
+
+  Future<String> updateGroupPhoto(String documentID, String fileType,
+      File haberFoto, String description) async {
+    if (appMode == AppMode.DEBUG) {
+      var groupImgUrl = await _firebaseStorageService.uploadGroupFile(
+          documentID, fileType, haberFoto, description);
+      await _fireStoreDbService.updateGroupProfilePhoto(groupImgUrl, documentID);
+      return groupImgUrl;
+    } else {
+      var groupImgUrl = await _firebaseStorageService.uploadGroupFile(
+          documentID, fileType, haberFoto, description);
+      return groupImgUrl;
+    }
+  }
+
+  Future<void> updateMembers(List<dynamic> members,String groupID) async{
+
+    if (appMode == AppMode.DEBUG) {
+      await _fireStoreDbService.updateMembers(members,groupID);
+    } else {
+      await _fireStoreDbService.updateMembers(members,groupID);
+    }
+  }
 }

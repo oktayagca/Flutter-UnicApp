@@ -13,6 +13,15 @@ extension PaddingExtension on BuildContext {
       dynamicHeight(0.025), dynamicHeight(0.025), dynamicHeight(0.025));
   EdgeInsets get paddingAllLow2 => EdgeInsets.fromLTRB(dynamicHeight(0.07),
       dynamicHeight(0.01), dynamicHeight(0.01), dynamicHeight(0.01));
+  EdgeInsets get paddingAllLowTop => EdgeInsets.fromLTRB(dynamicHeight(0.01),
+      dynamicHeight(0.4), dynamicHeight(0.01), dynamicHeight(0.01));
+
+  EdgeInsets get paddingAllLowTopSign => EdgeInsets.fromLTRB(dynamicHeight(0.01),
+      dynamicHeight(0.2), dynamicHeight(0.01), dynamicHeight(0.01));
+  EdgeInsets get paddingAllLowe => EdgeInsets.fromLTRB(dynamicHeight(0.01),
+      dynamicHeight(0.1), dynamicHeight(0.01), dynamicHeight(0.1));
+  EdgeInsets get paddingLeft => EdgeInsets.fromLTRB(dynamicHeight(0.05),
+      dynamicHeight(0.0), dynamicHeight(0.0), dynamicHeight(0.0));
 }
 
 extension MarginExtension on BuildContext {

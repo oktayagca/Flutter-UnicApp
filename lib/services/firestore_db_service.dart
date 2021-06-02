@@ -55,6 +55,12 @@ class FireStoreDbService implements DbBase {
       ..doc(userId).update({'profileURL': url}));
     return true;
   }
+  @override
+  Future<bool> updateGroupProfilePhoto(String url, String groupID) async {
+    await Future.value(FirebaseFirestore.instance.collection("groups")
+      ..doc(groupID).update({'groupImgUrl': url}));
+    return true;
+  }
 
   @override
   Future<List<UserModel>> getAllUser() async {
@@ -350,5 +356,11 @@ class FireStoreDbService implements DbBase {
         .set(saveGroupToMap);
 
     return true;
+  }
+
+  @override
+  Future<void> updateMembers(List<dynamic> members,String groupID) async{
+    await Future.value(FirebaseFirestore.instance.collection("groups")
+      ..doc(groupID).update({'members': members}));
   }
 }

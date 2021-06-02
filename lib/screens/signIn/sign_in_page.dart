@@ -8,6 +8,7 @@ import 'package:kbu_app/view_model/user_viewModel.dart';
 import 'package:kbu_app/widgets/social_login_button.dart';
 import 'package:provider/provider.dart';
 import 'package:kbu_app/widgets/context_extension.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 
 // ignore: must_be_immutable
 class SignInPage extends StatelessWidget {
@@ -32,44 +33,52 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: new Center(
-              child: new Text(
-            "Unicapp",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 24),
-          )),
-          elevation: 0,
-          backgroundColor: UniversalVeriables.bg,
-        ),
-        backgroundColor: UniversalVeriables.bg,
-        body: Container(
-          padding: EdgeInsets.all(16.0),
+      appBar: AppBar(
+        title: new Center(
+            child: new Text(
+              "Unicapp",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: ResponsiveFlutter.of(context).fontSize(3.5),
+              ),
+            )),
+        elevation: 0,
+        backgroundColor: UniversalVeriables.appBarColor,
+      ),
+      backgroundColor: UniversalVeriables.bg,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: context.paddingAllLowTopSign,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                getTranslated(context, "Sign In"),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 32,
-                    color: Colors.white),
+              Container(
+                width: context.dynamicWidth(0.95),
+                height: context.dynamicHeight(0.6),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("image/logobizim.png"),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius:
+                  BorderRadius.circular(8.0),
+                ),
               ),
               SizedBox(
-                height: 8,
+                height: context.dynamicHeight(0.1),
               ),
               FittedBox(
                 child: SocialLoginButton(
+                  butonColor: UniversalVeriables.customDrawerColor,
                   onPressed: () => _signInGoogle(context),
                   butonIcon: Image(
-                    height: 30,
+                    height: context.dynamicHeight(0.1),
                     image: AssetImage("image/gmail.png"),
                   ),
                   butonText:
-                      getTranslated(context, "Sign in with Gmail and Password"),
+                  getTranslated(context, "Sign in with Gmail and Password"),
                   //farklı mail adresi ile olan
                   textColor: Colors.white,
                   radius: 16,
@@ -77,13 +86,13 @@ class SignInPage extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 8,
+                height: context.dynamicHeight(0.01),
               ),
               FittedBox(
                 child: SocialLoginButton(
-                  butonColor: UniversalVeriables.blueColor,
+                  butonColor: UniversalVeriables.customDrawerColor,
                   butonText:
-                      getTranslated(context, "Sign in with Email and Password"),
+                  getTranslated(context, "Sign in with Email and Password"),
                   textColor: Colors.white,
                   radius: 16,
                   onPressed: () {
@@ -91,13 +100,15 @@ class SignInPage extends StatelessWidget {
                   },
                   height: context.dynamicHeight(0.1),
                   butonIcon: Image(
-                    height: 30,
+                    height: context.dynamicHeight(0.1),
                     image: AssetImage("image/kbu.png"),
                   ),
                 ),
               ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

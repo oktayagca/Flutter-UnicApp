@@ -63,6 +63,11 @@
   "Documents": "Dökümanlar",
   "More Information": "Daha Fazla Bilgi",
   "Groups": "Gruplar",
-  "Language": "Dil"
+  "Language": "Dil",
+  "Exit Group": "Gruptan Çık",
+  "Add Participant": "Katılımcı Ekle",
+  "You left the group": "Gruptan ayrıldınız",
+  "You are about to leave the group": "Gruptan ayrılmak üzeresiniz",
+  "No": "Hayır"
 
 }

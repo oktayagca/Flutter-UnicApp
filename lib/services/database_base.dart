@@ -11,6 +11,7 @@ abstract class DbBase{
   Future<UserModel> readUser(String userId);
   Future<bool> updateUserName(String userId,String newUserName);
   Future<bool> updateProfilePhoto(String url,String userId);
+  Future<bool> updateGroupProfilePhoto(String url,String groupID);
   Future<List<UserModel>> getAllUser();
   Stream<List<Message>> getMessages(String currentUserID,String chattedUserID);
   Stream<List<Message>> getGroupMessages(String currentUserID,String chattedUserID);
@@ -22,5 +23,6 @@ abstract class DbBase{
   Future<bool> createNews(News news);
   Future<List<News>> getAllNews();
   Future<bool> createGroup(Group group);
+  Future<void>  updateMembers(List<dynamic> members,String groupID);
 
 }
